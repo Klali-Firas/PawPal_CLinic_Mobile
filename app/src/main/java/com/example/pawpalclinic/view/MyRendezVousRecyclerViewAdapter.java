@@ -2,60 +2,83 @@ package com.example.pawpalclinic.view;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.pawpalclinic.view.placeholder.PlaceholderContent.PlaceholderItem;
+import com.example.pawpalclinic.model.RendezVous;
 import com.example.pawpalclinic.databinding.FragmentRendezVousBinding;
+import com.example.pawpalclinic.controller.AnimauxController;
+import com.example.pawpalclinic.model.Animaux;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRendezVousRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private final List<RendezVous> mValues;
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+    private final AnimauxController animauxController;
 
-    public MyRendezVousRecyclerViewAdapter(List<PlaceholderItem> items) {
+    public MyRendezVousRecyclerViewAdapter(List<RendezVous> items, AnimauxController animauxController) {
         mValues = items;
+        this.animauxController = animauxController;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-    return new ViewHolder(FragmentRendezVousBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-
+        return new ViewHolder(FragmentRendezVousBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
+    // Inside the onBindViewHolder method of MyRendezVousRecyclerViewAdapter
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
-    }
+        holder.mDateView.setText(dateFormat.format(mValues.get(position).getDateRendezVous()));
+        holder.mStatutView.setText(mValues.get(position).getStatut());
+        holder.mMotifView.setText(String.valueOf(mValues.get(position).getMotif()));
 
+        // Fetch animal name using animal id
+        int animalId = mValues.get(position).getAnimalId();
+        CompletableFuture<Animaux> animalFuture = animauxController.getAnimauxById(animalId);
+        animalFuture.thenAccept(animaux -> {
+            if (animaux != null) {
+                // Update UI on the main thread
+                holder.itemView.post(() -> holder.mAnimalNameView.setText(animaux.getNom()));
+            } else {
+                // Update UI on the main thread
+                holder.itemView.post(() -> holder.mAnimalNameView.setText("Unknown"));
+            }
+        }).exceptionally(throwable -> {
+            // Update UI on the main thread
+            holder.itemView.post(() -> holder.mAnimalNameView.setText("Error"));
+            return null;
+        });
+    }
     @Override
     public int getItemCount() {
         return mValues.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public PlaceholderItem mItem;
+        public final TextView mDateView;
+        public final TextView mStatutView;
+        public final TextView mMotifView;
+        public final TextView mAnimalNameView;
+        public RendezVous mItem;
 
-    public ViewHolder(FragmentRendezVousBinding binding) {
-      super(binding.getRoot());
-      mIdView = binding.itemNumber;
-      mContentView = binding.content;
-    }
+        public ViewHolder(FragmentRendezVousBinding binding) {
+            super(binding.getRoot());
+            mDateView = binding.dateRendezVous;
+            mStatutView = binding.statut;
+            mMotifView = binding.motif;
+            mAnimalNameView = binding.animalName;
+        }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mStatutView.getText() + "'";
         }
     }
 }

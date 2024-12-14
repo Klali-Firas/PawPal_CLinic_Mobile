@@ -21,6 +21,8 @@ public class RendezVousService {
     private final String API_URL ;
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
+    private final SimpleDateFormat dateRendezVousFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
+
 
     public RendezVousService(Context c) {
         this.API_URL =  c.getString(R.string.api_base_url) + "/api/public/rendezvous";
@@ -45,17 +47,17 @@ public class RendezVousService {
                         List<RendezVous> rendezVousList = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            Date dateRendezVous = dateFormat.parse(jsonObject.getString("dateRendezVous"));
+                            Date dateRendezVous = dateRendezVousFormat.parse(jsonObject.getString("dateRendezVous"));
                             Date creeLe = jsonObject.has("creeLe") ? dateFormat.parse(jsonObject.getString("creeLe")) : null;
                             RendezVous rendezVous = new RendezVous(
                                     jsonObject.getInt("id"),
                                     jsonObject.getInt("animalId"),
-                                    jsonObject.has("veterinaireId") ? jsonObject.getInt("veterinaireId") : null,
+                                    jsonObject.has("veterinaireId") && !jsonObject.isNull("veterinaireId") ? jsonObject.getInt("veterinaireId") : null,
                                     dateRendezVous,
                                     jsonObject.getString("statut"),
                                     jsonObject.getInt("motif"),
                                     creeLe,
-                                    jsonObject.has("remarques") ? jsonObject.getString("remarques") : null
+                                    jsonObject.has("remarques") && !jsonObject.isNull("remarques") ? jsonObject.getString("remarques") : null
                             );
                             rendezVousList.add(rendezVous);
                         }
@@ -72,6 +74,7 @@ public class RendezVousService {
         });
         return future;
     }
+
 
     // Assign veterinaire
     public CompletableFuture<RendezVous> assignVeterinaire(int rendezVousId, int veterinaireId) {
