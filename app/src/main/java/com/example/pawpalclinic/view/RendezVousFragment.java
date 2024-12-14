@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.controller.AnimauxController;
 import com.example.pawpalclinic.controller.RendezVousController;
+import com.example.pawpalclinic.controller.ServiceController;
 import com.example.pawpalclinic.model.Animaux;
 import com.example.pawpalclinic.model.RendezVous;
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ public class RendezVousFragment extends Fragment {
     private List<RendezVous> rendezVousList = new ArrayList<>();
     private AnimauxController animauxController;
     private RendezVousController rendezVousController;
-
+    private ServiceController serviceController;
     private static final String ARG_COLUMN_COUNT = "column-count";
 
     public static RendezVousFragment newInstance(int columnCount) {
@@ -56,6 +57,7 @@ public class RendezVousFragment extends Fragment {
         }
         animauxController = new AnimauxController(getContext());
         rendezVousController = new RendezVousController(getContext());
+        serviceController = new ServiceController(getContext());
     }
 
     @Override
@@ -72,7 +74,7 @@ public class RendezVousFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        adapter = new MyRendezVousRecyclerViewAdapter(rendezVousList, animauxController);
+        adapter = new MyRendezVousRecyclerViewAdapter(rendezVousList, animauxController, serviceController);
         recyclerView.setAdapter(adapter);
 
         loadUserRendezVous(context);
