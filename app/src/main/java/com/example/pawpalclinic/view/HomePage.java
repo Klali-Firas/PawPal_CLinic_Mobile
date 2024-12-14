@@ -76,7 +76,7 @@ public class HomePage extends AppCompatActivity {
             } else if (itemId == R.id.nav_rendezvous) {
                 selectedFragment = RendezVousFragment.newInstance(1);
             } else if (itemId == R.id.nav_add) {
-                selectedFragment = RendezVousFragment.newInstance(1);
+                selectedFragment = new AddRendezVousFragment();
                 // Handle add item
             } else if (itemId == R.id.nav_shop) {
                 // Handle shop item

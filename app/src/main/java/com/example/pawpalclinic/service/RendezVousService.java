@@ -124,7 +124,7 @@ public class RendezVousService {
             jsonObject.put("id", rendezVous.getId());
             jsonObject.put("animalId", rendezVous.getAnimalId());
             jsonObject.put("veterinaireId", rendezVous.getVeterinaireId());
-            jsonObject.put("dateRendezVous", dateFormat.format(rendezVous.getDateRendezVous()));
+            jsonObject.put("dateRendezVous", dateRendezVousFormat.format(rendezVous.getDateRendezVous()));
             jsonObject.put("statut", rendezVous.getStatut());
             jsonObject.put("motif", rendezVous.getMotif());
             jsonObject.put("creeLe", dateFormat.format(rendezVous.getCreeLe()));
