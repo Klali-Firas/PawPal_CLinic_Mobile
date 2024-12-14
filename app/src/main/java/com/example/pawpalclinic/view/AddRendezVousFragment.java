@@ -27,6 +27,7 @@ import com.example.pawpalclinic.controller.ServiceController;
 import com.example.pawpalclinic.model.Animaux;
 import com.example.pawpalclinic.model.RendezVous;
 import com.example.pawpalclinic.model.Service;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import org.json.JSONObject;
@@ -86,7 +87,7 @@ public class AddRendezVousFragment extends Fragment {
         workingHoursText = view.findViewById(R.id.working_hours_text);
 
         // Set working hours text
-        workingHoursText.setText("Working Hours: Mon-Thu 08:00-12:00, 14:00-17:00; Fri 08:00-14:00");
+        workingHoursText.setText("Working Hours:\nMon-Thu 08:00-12:00, 14:00-17:00;\nFri 08:00-14:00");
 
         // Retrieve user data from SharedPreferences
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
@@ -140,7 +141,7 @@ public class AddRendezVousFragment extends Fragment {
         animauxFuture.thenAccept(animauxList -> {
             List<String> animalNames = new ArrayList<>();
             for (Animaux animaux : animauxList) {
-                animalNames.add(animaux.getNom());
+                animalNames.add(animaux.getNom() + " (" + animaux.getRace() + ")");
             }
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, animalNames);
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -240,7 +241,6 @@ public class AddRendezVousFragment extends Fragment {
         }
 
         Date dateRendezVous = calendar.getTime();
-
         Animaux selectedAnimal = animauxController.getAllAnimaux().join().get(selectedAnimalPosition);
         Service selectedService = serviceController.getAllServices().join().get(selectedServicePosition);
 
@@ -255,13 +255,32 @@ public class AddRendezVousFragment extends Fragment {
                 null
         );
 
-        rendezVousController.createRendezVous(rendezVous);
-        Toast.makeText(getContext(), "RendezVous created successfully", Toast.LENGTH_SHORT).show();
+        // Show confirmation dialog
+        showConfirmationDialog(rendezVous, selectedAnimal, selectedService);
+    }
 
-        // Reset form
-        selectAnimal.setSelection(0);
-        selectService.setSelection(0);
-        inputDate.setText("");
-        btnSubmit.setEnabled(false);
+    private void showConfirmationDialog(RendezVous rendezVous, Animaux selectedAnimal, Service selectedService) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm", Locale.getDefault());
+        String message = "Animal: " + selectedAnimal.getNom() + " (" + selectedAnimal.getRace() + ")\n" +
+                "Service: " + selectedService.getNomService() + "\n" +
+                "Date: " + sdf.format(rendezVous.getDateRendezVous()) + "\n";
+
+        new MaterialAlertDialogBuilder(getContext())
+                .setTitle("Confirm RendezVous")
+                .setMessage(message)
+                .setIcon(R.drawable.ic_confirmation) // Add your confirmation icon here
+                .setPositiveButton("Confirm", (dialog, which) -> {
+                    // Create rendezvous
+                    rendezVousController.createRendezVous(rendezVous);
+                    Toast.makeText(getContext(), "RendezVous created successfully", Toast.LENGTH_SHORT).show();
+
+                    // Reset form
+                    selectAnimal.setSelection(0);
+                    selectService.setSelection(0);
+                    inputDate.setText("");
+                    btnSubmit.setEnabled(false);
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }
