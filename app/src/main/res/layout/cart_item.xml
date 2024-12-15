@@ -1,0 +1,112 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="8dp"
+card_view:cardBackgroundColor="@color/md_theme_surfaceContainerLow"
+    card_view:cardElevation="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/product_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:scaleType="centerCrop"
+                android:layout_weight="1"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:paddingStart="8dp">
+
+                <TextView
+                    android:id="@+id/product_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:text="product name"/>
+
+                <TextView
+                    android:id="@+id/product_unit_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="product price"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/button_decrease_quantity"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_minus"
+                        android:background="@color/md_theme_tertiaryContainer"
+                        android:backgroundTint="@color/md_theme_tertiaryContainer"
+                        android:contentDescription="Decrease quantity"
+                        card_view:tint="@color/md_theme_onTertiaryContainer" />
+
+                    <EditText
+                        android:id="@+id/edit_quantity"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:gravity="center"
+                        android:text="1" />
+
+                    <ImageButton
+                        android:id="@+id/button_increase_quantity"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/baseline_add_24"
+                        android:background="@color/md_theme_tertiaryContainer"
+                        android:backgroundTint="@color/md_theme_tertiaryContainer"
+                        android:contentDescription="Increase quantity"
+                        card_view:tint="@color/md_theme_onTertiaryContainer" />
+
+                    <ImageButton
+                        android:id="@+id/button_remove"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/ic_remove_from_cart"
+                        android:background="@color/md_theme_errorContainer"
+                        android:backgroundTint="@color/md_theme_errorContainer"
+                        android:contentDescription="Remove item"
+                        card_view:tint="@color/md_theme_onErrorContainer" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/product_total_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:layout_marginTop="8dp"
+                    android:text="total per product"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

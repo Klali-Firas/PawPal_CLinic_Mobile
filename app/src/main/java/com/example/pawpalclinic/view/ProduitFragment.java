@@ -1,6 +1,7 @@
 package com.example.pawpalclinic.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -78,8 +79,10 @@ public class ProduitFragment extends Fragment implements MyProduitRecyclerViewAd
             }
         });
 
-        cartButton.setOnClickListener(v -> Toast.makeText(getContext(), "Cart clicked", Toast.LENGTH_SHORT).show());
-
+        cartButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), cart.class);
+            startActivity(intent);
+        });
         loadProduits();
         updateCartCount();
         return view;
@@ -138,8 +141,14 @@ public class ProduitFragment extends Fragment implements MyProduitRecyclerViewAd
             cartCount.setText(String.valueOf(count));
             cartCount.setVisibility(View.VISIBLE);
         } else {
-            cartCount.setVisibility(View.GONE);
+            cartCount.setText("0");
+            cartCount.setVisibility(View.VISIBLE);
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateCartCount();
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -167,18 +168,18 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView productName;
-        public final ImageView productImage;
         public final TextView productDescription;
         public final TextView productPrice;
         public final Button addToCartButton;
+        public final ImageView productImage;
 
         public ViewHolder(View view) {
             super(view);
             productName = view.findViewById(R.id.product_name);
-            productImage = view.findViewById(R.id.product_image);
             productDescription = view.findViewById(R.id.product_description);
             productPrice = view.findViewById(R.id.product_price);
             addToCartButton = view.findViewById(R.id.add_to_cart_button);
+            productImage = view.findViewById(R.id.product_image);
         }
     }
 
