@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.controller.ProduitController;
 import com.example.pawpalclinic.model.Produit;
+import com.example.pawpalclinic.service.CartService;
 
 import org.json.JSONObject;
 
@@ -27,13 +29,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-public class ProduitFragment extends Fragment {
+public class ProduitFragment extends Fragment implements MyProduitRecyclerViewAdapter.CartUpdateListener {
 
     private ProduitController produitController;
     private RecyclerView recyclerView;
     private MyProduitRecyclerViewAdapter adapter;
     private List<Produit> allProduits;
     private int userId;
+    private CartService cartService;
+    private TextView cartCount;
 
     public ProduitFragment() {
     }
@@ -47,6 +51,7 @@ public class ProduitFragment extends Fragment {
         super.onCreate(savedInstanceState);
         produitController = new ProduitController(getContext());
         userId = getUserIdFromSharedPreferences();
+        cartService = new CartService(getContext(), userId);
     }
 
     @Override
@@ -57,6 +62,7 @@ public class ProduitFragment extends Fragment {
 
         SearchView searchView = view.findViewById(R.id.search_view);
         ImageButton cartButton = view.findViewById(R.id.cart_button);
+        cartCount = view.findViewById(R.id.cart_count);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -75,6 +81,7 @@ public class ProduitFragment extends Fragment {
         cartButton.setOnClickListener(v -> Toast.makeText(getContext(), "Cart clicked", Toast.LENGTH_SHORT).show());
 
         loadProduits();
+        updateCartCount();
         return view;
     }
 
@@ -85,7 +92,7 @@ public class ProduitFragment extends Fragment {
                 allProduits = produits;
                 adapter = new MyProduitRecyclerViewAdapter(produits, produit -> {
                     Toast.makeText(getContext(), produit.getNomProduit() + " clicked", Toast.LENGTH_SHORT).show();
-                }, userId);
+                }, userId, this);
                 recyclerView.setAdapter(adapter);
             });
         }).exceptionally(throwable -> {
@@ -123,5 +130,20 @@ public class ProduitFragment extends Fragment {
             }
         }
         return -1; // Default value if user ID is not found
+    }
+
+    private void updateCartCount() {
+        int count = cartService.getCart().size();
+        if (count > 0) {
+            cartCount.setText(String.valueOf(count));
+            cartCount.setVisibility(View.VISIBLE);
+        } else {
+            cartCount.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onCartUpdated() {
+        updateCartCount();
     }
 }

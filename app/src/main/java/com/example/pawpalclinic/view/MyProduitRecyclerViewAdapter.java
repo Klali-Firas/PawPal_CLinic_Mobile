@@ -31,22 +31,28 @@ import java.util.concurrent.Executors;
 
 public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduitRecyclerViewAdapter.ViewHolder> {
 
-    private  List<Produit> mValues;
+    private List<Produit> mValues;
     private final OnItemClickListener listener;
     private final ExecutorService executorService;
     private final Handler mainHandler;
     private final int userId;
+    private final CartUpdateListener cartUpdateListener;
 
     public interface OnItemClickListener {
         void onItemClick(Produit produit);
     }
 
-    public MyProduitRecyclerViewAdapter(List<Produit> items, OnItemClickListener listener, int userId) {
+    public interface CartUpdateListener {
+        void onCartUpdated();
+    }
+
+    public MyProduitRecyclerViewAdapter(List<Produit> items, OnItemClickListener listener, int userId, CartUpdateListener cartUpdateListener) {
         mValues = items;
         this.listener = listener;
         this.executorService = Executors.newSingleThreadExecutor();
         this.mainHandler = new Handler(Looper.getMainLooper());
         this.userId = userId;
+        this.cartUpdateListener = cartUpdateListener;
     }
 
     @Override
@@ -74,10 +80,6 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
 
         holder.itemView.setOnClickListener(v -> showAddToCartDialog(holder.itemView.getContext(), produit));
         holder.addToCartButton.setOnClickListener(v -> showAddToCartDialog(holder.itemView.getContext(), produit));
-    }
-    public void updateList(List<Produit> newList) {
-        mValues= newList;
-        notifyDataSetChanged();
     }
 
     private void showAddToCartDialog(Context context, Produit produit) {
@@ -136,6 +138,11 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
 
             dialog.dismiss();
             Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
+
+            // Update cart count
+            if (cartUpdateListener != null) {
+                cartUpdateListener.onCartUpdated();
+            }
         });
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
@@ -147,6 +154,12 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
 
         dialog.show();
     }
+
+    public void updateList(List<Produit> newList) {
+        mValues = newList;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mValues.size();
