@@ -12,18 +12,28 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawpalclinic.R;
+import com.example.pawpalclinic.controller.CommandeController;
+import com.example.pawpalclinic.controller.CommandeProduitController;
+import com.example.pawpalclinic.model.Commande;
+import com.example.pawpalclinic.model.CommandeProduit;
 import com.example.pawpalclinic.model.Produit;
 import com.example.pawpalclinic.service.CartService;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.CartUpdateListener {
 
     private CartService cartService;
     private CartRecyclerViewAdapter adapter;
     private TextView totalPriceTextView;
+    private CommandeController commandeController;
+    private CommandeProduitController commandeProduitController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +41,9 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
         setContentView(R.layout.activity_cart);
 
         cartService = new CartService(this, getUserIdFromSharedPreferences());
+        commandeController = new CommandeController(this);
+        commandeProduitController = new CommandeProduitController(this);
+
         List<Produit> cartItems = cartService.getCart();
 
         RecyclerView recyclerView = findViewById(R.id.cart_recycler_view);
@@ -42,7 +55,7 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
         updateTotalPrice();
 
         Button checkoutButton = findViewById(R.id.checkout_button);
-        checkoutButton.setOnClickListener(v -> Toast.makeText(this, "Checkout clicked", Toast.LENGTH_SHORT).show());
+        checkoutButton.setOnClickListener(v -> showConfirmationDialog());
     }
 
     private int getUserIdFromSharedPreferences() {
@@ -66,13 +79,62 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
             totalPrice += produit.getPrix() * produit.getQuantity();
         }
         totalPriceTextView.setText(String.format("Total: %s TND", totalPrice));
+
+        Button checkoutButton = findViewById(R.id.checkout_button);
         if (cartItems.isEmpty()) {
             totalPriceTextView.setText("Total: 0 TND");
+            checkoutButton.setEnabled(false);
+        } else {
+            checkoutButton.setEnabled(true);
         }
     }
-
     @Override
     public void onCartUpdated() {
         updateTotalPrice();
+    }
+
+    private void confirmOrder() {
+        Commande commande = new Commande(0, getUserIdFromSharedPreferences(), new Date(), "en_attente");
+        CompletableFuture<Commande> createdCommandeFuture = commandeController.createCommande(commande);
+
+        createdCommandeFuture.thenAccept(createdCommande -> {
+            List<CommandeProduit> order = new ArrayList<>();
+            for (Produit product : cartService.getCart()) {
+                order.add(new CommandeProduit(0, createdCommande.getId(), product.getId(), product.getQuantity()));
+            }
+
+            for (CommandeProduit commandeProduit : order) {
+                commandeProduitController.createCommandeProduit(commandeProduit).thenAccept(result -> {
+                    System.out.println("Order item confirmed!");
+                }).exceptionally(error -> {
+                    System.err.println("Error saving order item: " + error.getMessage());
+                    return null;
+                });
+            }
+
+            runOnUiThread(() -> {
+                clearCart(); // Clear the cart and update the UI
+                Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_SHORT).show();
+            });
+        }).exceptionally(error -> {
+            System.err.println("Error creating order: " + error.getMessage());
+            return null;
+        });
+    }
+    private void showConfirmationDialog() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Confirm Order")
+                .setMessage("Are you sure you want to place this order?")
+                .setIcon(R.drawable.ic_confirmation) // Use a suitable icon
+                .setPositiveButton("Yes", (dialog, whichButton) -> confirmOrder())
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void clearCart() {
+        cartService.clearCart();
+        adapter.mValues.clear(); // Clear the adapter's data
+        adapter.notifyDataSetChanged(); // Notify the adapter to refresh the UI
+        updateTotalPrice(); // Update the total price
     }
 }

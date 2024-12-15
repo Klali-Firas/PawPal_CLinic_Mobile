@@ -31,7 +31,7 @@ import java.util.concurrent.Executors;
 
 public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerViewAdapter.ViewHolder> {
 
-    private List<Produit> mValues;
+    public List<Produit> mValues;
     private final Context context;
     private final CartService cartService;
     private final ExecutorService executorService;
