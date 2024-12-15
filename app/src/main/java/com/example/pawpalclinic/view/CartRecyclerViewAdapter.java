@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
     private final ExecutorService executorService;
     private final Handler mainHandler;
     private final CartUpdateListener cartUpdateListener;
-
+    private boolean isRemovingItem = false;
     public interface CartUpdateListener {
         void onCartUpdated();
     }
@@ -84,7 +85,12 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (isRemovingItem) {
+                    return;
+                }
+
                 try {
+                    Log.d("CartRecyclerViewAdapter", "Quantity changed: " + s.toString());
                     int quantity = Integer.parseInt(s.toString());
                     produit.setQuantity(quantity);
                     cartService.addToCart(produit);
@@ -119,10 +125,14 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         });
 
         holder.buttonRemove.setOnClickListener(v -> {
-            cartService.removeFromCart(produit.getId());
-            mValues.remove(position);
-            notifyItemRemoved(position);
-            cartUpdateListener.onCartUpdated();
+            if (position >= 0 && position < mValues.size()) {
+                isRemovingItem = true;
+                cartService.removeFromCart(produit.getId());
+                mValues.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, mValues.size());
+                cartUpdateListener.onCartUpdated();
+            }
         });
     }
 
@@ -168,6 +178,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
                         imageView.setImageBitmap(bitmap);
                     }
                 });
+                isRemovingItem = false;
             } catch (Exception e) {
                 e.printStackTrace();
             }

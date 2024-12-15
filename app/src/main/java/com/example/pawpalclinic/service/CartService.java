@@ -45,7 +45,6 @@ public class CartService {
             } catch (Exception e) {
                 Log.e(TAG, "Error adding product to cart", e);
             }
-            logCartContents();
         }
     }
 
@@ -80,10 +79,10 @@ public class CartService {
             SQLiteDatabase db = dbHelper.getWritableDatabase();
             try {
                 db.delete(CartDatabaseHelper.TABLE_CART, CartDatabaseHelper.COLUMN_ID + " = ? AND " + CartDatabaseHelper.COLUMN_USER_ID + " = ?", new String[]{String.valueOf(productId), String.valueOf(userId)});
+                Log.d(TAG, "Product with ID " + productId + " removed from cart");
             } catch (Exception e) {
                 Log.e(TAG, "Error removing product from cart", e);
             }
-            logCartContents();
         }
     }
 
@@ -95,19 +94,10 @@ public class CartService {
             } catch (Exception e) {
                 Log.e(TAG, "Error clearing cart", e);
             }
-            logCartContents();
         }
     }
 
-    public void updateCart(List<Produit> cart) {
-        synchronized (dbLock) {
-            clearCart();
-            for (Produit product : cart) {
-                addToCart(product);
-            }
-            logCartContents();
-        }
-    }
+
 
     public Produit getProductById(int productId) {
         synchronized (dbLock) {
