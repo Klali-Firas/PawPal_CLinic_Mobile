@@ -1,0 +1,191 @@
+package com.example.pawpalclinic.view;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.pawpalclinic.R;
+import com.example.pawpalclinic.model.Produit;
+import com.example.pawpalclinic.service.CartService;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduitRecyclerViewAdapter.ViewHolder> {
+
+    private  List<Produit> mValues;
+    private final OnItemClickListener listener;
+    private final ExecutorService executorService;
+    private final Handler mainHandler;
+    private final int userId;
+
+    public interface OnItemClickListener {
+        void onItemClick(Produit produit);
+    }
+
+    public MyProduitRecyclerViewAdapter(List<Produit> items, OnItemClickListener listener, int userId) {
+        mValues = items;
+        this.listener = listener;
+        this.executorService = Executors.newSingleThreadExecutor();
+        this.mainHandler = new Handler(Looper.getMainLooper());
+        this.userId = userId;
+    }
+
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.fragment_produit, parent, false);
+        return new ViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        Produit produit = mValues.get(position);
+        holder.productName.setText(produit.getNomProduit());
+        holder.productDescription.setText(produit.getDescription());
+        holder.productPrice.setText(String.format("%s TND", produit.getPrix()));
+        loadImage(produit.getImage(), holder.productImage);
+
+        if (produit.getQuantiteStock() == 0) {
+            holder.addToCartButton.setEnabled(false);
+            holder.addToCartButton.setText("Out of Stock");
+        } else {
+            holder.addToCartButton.setEnabled(true);
+            holder.addToCartButton.setText(R.string.add_to_cart);
+        }
+
+        holder.itemView.setOnClickListener(v -> showAddToCartDialog(holder.itemView.getContext(), produit));
+        holder.addToCartButton.setOnClickListener(v -> showAddToCartDialog(holder.itemView.getContext(), produit));
+    }
+    public void updateList(List<Produit> newList) {
+        mValues= newList;
+        notifyDataSetChanged();
+    }
+
+    private void showAddToCartDialog(Context context, Produit produit) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View dialogView = inflater.inflate(R.layout.dialog_add_to_cart, null);
+        builder.setView(dialogView);
+
+        TextView productName = dialogView.findViewById(R.id.dialog_product_name);
+        ImageView productImage = dialogView.findViewById(R.id.dialog_product_image);
+        TextView productDescription = dialogView.findViewById(R.id.dialog_product_description);
+        EditText quantityEdit = dialogView.findViewById(R.id.edit_quantity);
+        TextView totalText = dialogView.findViewById(R.id.text_total);
+        Button decreaseButton = dialogView.findViewById(R.id.button_decrease_quantity);
+        Button increaseButton = dialogView.findViewById(R.id.button_increase_quantity);
+        Button confirmButton = dialogView.findViewById(R.id.button_confirm);
+        Button cancelButton = dialogView.findViewById(R.id.button_cancel);
+
+        productName.setText(produit.getNomProduit());
+        productDescription.setText(produit.getDescription());
+        loadImage(produit.getImage(), productImage);
+
+        CartService cartService = new CartService(context, userId);
+        Produit existingProduct = cartService.getProductById(produit.getId());
+        final int[] quantity = {existingProduct != null ? existingProduct.getQuantity() : 1};
+        quantityEdit.setText(String.valueOf(quantity[0]));
+        totalText.setText(String.format("Total: %s TND", produit.getPrix() * quantity[0]));
+
+        decreaseButton.setOnClickListener(v -> {
+            int currentQuantity = Integer.parseInt(quantityEdit.getText().toString());
+            if (currentQuantity > 1) {
+                currentQuantity--;
+                quantityEdit.setText(String.valueOf(currentQuantity));
+                totalText.setText(String.format("Total: %s TND", produit.getPrix() * currentQuantity));
+            }
+        });
+
+        increaseButton.setOnClickListener(v -> {
+            int currentQuantity = Integer.parseInt(quantityEdit.getText().toString());
+            currentQuantity++;
+            quantityEdit.setText(String.valueOf(currentQuantity));
+            totalText.setText(String.format("Total: %s TND", produit.getPrix() * currentQuantity));
+        });
+
+        AlertDialog dialog = builder.create();
+
+        // Set the dialog window background to transparent
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        }
+
+        confirmButton.setOnClickListener(v -> {
+            int finalQuantity = Integer.parseInt(quantityEdit.getText().toString());
+            produit.setQuantity(finalQuantity);
+            cartService.addToCart(produit);
+
+            dialog.dismiss();
+            Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
+        });
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+
+        // Disable confirm button if product is out of stock
+        if (produit.getQuantiteStock() == 0) {
+            confirmButton.setEnabled(false);
+        }
+
+        dialog.show();
+    }
+    @Override
+    public int getItemCount() {
+        return mValues.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public final TextView productName;
+        public final ImageView productImage;
+        public final TextView productDescription;
+        public final TextView productPrice;
+        public final Button addToCartButton;
+
+        public ViewHolder(View view) {
+            super(view);
+            productName = view.findViewById(R.id.product_name);
+            productImage = view.findViewById(R.id.product_image);
+            productDescription = view.findViewById(R.id.product_description);
+            productPrice = view.findViewById(R.id.product_price);
+            addToCartButton = view.findViewById(R.id.add_to_cart_button);
+        }
+    }
+
+    private void loadImage(String url, ImageView imageView) {
+        executorService.execute(() -> {
+            try {
+                URL urlConnection = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                mainHandler.post(() -> {
+                    if (bitmap != null) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+}

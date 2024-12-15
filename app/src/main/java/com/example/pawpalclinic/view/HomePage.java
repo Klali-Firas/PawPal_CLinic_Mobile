@@ -79,6 +79,7 @@ public class HomePage extends AppCompatActivity {
                 selectedFragment = new AddRendezVousFragment();
                 // Handle add item
             } else if (itemId == R.id.nav_shop) {
+                selectedFragment = ProduitFragment.newInstance();
                 // Handle shop item
             } else if (itemId == R.id.nav_commandes) {
                 // Handle commandes item

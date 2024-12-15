@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="Working Hours: Mon-Thu 08:00-12:00, 14:00-17:00; Fri 08:00-14:00"
-        android:textColor="@android:color/black" />
+         />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
