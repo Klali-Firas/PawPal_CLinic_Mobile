@@ -1,5 +1,6 @@
 package com.example.pawpalclinic.view;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -64,6 +65,8 @@ public class HomePage extends AppCompatActivity {
                 Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
                 // Handle home action
             } else if (itemId == R.id.nav_profile) {
+                Intent intent = new Intent(this, AI_Assistant.class);
+                startActivity(intent);
                 // Handle profile action
             } else if (itemId == R.id.nav_settings) {
                 // Handle settings action
