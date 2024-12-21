@@ -25,11 +25,16 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class HomePage extends AppCompatActivity {
 
     private static final String SHARED_PREFS_NAME = "user_prefs";
     private static final String USER_PHOTO_KEY = "user_photo";
     private DrawerLayout drawerLayout;
+    private Fragment currentFragment = null;
+    private Map<Integer, Fragment> fragmentMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,30 +72,40 @@ public class HomePage extends AppCompatActivity {
             return true;
         });
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
-            int itemId = item.getItemId();
+        bottomNavigationView.setOnItemReselectedListener(item -> {
+            // Do nothing when reselected
+        });
 
-            if (itemId == R.id.nav_animaux) {
-                selectedFragment = AnimauxFragment.newInstance(1);
-            } else if (itemId == R.id.nav_rendezvous) {
-                selectedFragment = RendezVousFragment.newInstance(1);
-            } else if (itemId == R.id.nav_add) {
-                selectedFragment = new AddRendezVousFragment();
-                // Handle add item
-            } else if (itemId == R.id.nav_shop) {
-                selectedFragment = ProduitFragment.newInstance();
-                // Handle shop item
-            } else if (itemId == R.id.nav_commandes) {
-                // Handle commandes item
-                selectedFragment = new CommandeFragment();
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = fragmentMap.get(item.getItemId());
+            if (selectedFragment == null) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.nav_animaux) {
+                    selectedFragment = AnimauxFragment.newInstance(1);
+                } else if (itemId == R.id.nav_rendezvous) {
+                    selectedFragment = RendezVousFragment.newInstance(1);
+                } else if (itemId == R.id.nav_add) {
+                    selectedFragment = new AddRendezVousFragment();
+                } else if (itemId == R.id.nav_shop) {
+                    selectedFragment = ProduitFragment.newInstance();
+                } else if (itemId == R.id.nav_commandes) {
+                    selectedFragment = new CommandeFragment();
+                }
+                fragmentMap.put(itemId, selectedFragment);
             }
 
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, selectedFragment)
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .commit();
+            if (selectedFragment != null && selectedFragment != currentFragment) {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                if (selectedFragment.isAdded()) {
+                    transaction.hide(currentFragment).show(selectedFragment);
+                } else {
+                    if (currentFragment != null) {
+                        transaction.hide(currentFragment);
+                    }
+                    transaction.add(R.id.fragment_container, selectedFragment);
+                }
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+                currentFragment = selectedFragment;
             }
 
             return true;
@@ -98,8 +113,10 @@ public class HomePage extends AppCompatActivity {
 
         // Set default fragment
         if (savedInstanceState == null) {
+            currentFragment = AnimauxFragment.newInstance(1);
+            fragmentMap.put(R.id.nav_animaux, currentFragment);
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, AnimauxFragment.newInstance(1))
+                    .add(R.id.fragment_container, currentFragment)
                     .commit();
         }
     }
