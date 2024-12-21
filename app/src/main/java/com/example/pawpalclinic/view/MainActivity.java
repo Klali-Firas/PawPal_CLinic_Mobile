@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
 
         signInService = new SignInService(this, signInLauncher);
 
+        if (signInService.isSignedIn()) {
+            startActivity(new Intent(this, HomePage.class));
+            finish();
+            return;
+        }
+
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(v -> signInService.signIn());
 

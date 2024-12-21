@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.view.HomePage;
+import com.example.pawpalclinic.view.MainActivity;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
@@ -32,6 +33,12 @@ public class SignInService {
     private static final String USER_KEY = "user";
     private final String apiUrl;
 
+public SignInService(Context context) {
+        this.context = context;
+        this.signInClient = Identity.getSignInClient(context);
+        this.signInLauncher = null;
+        this.apiUrl = context.getString(R.string.api_base_url);
+}
 
     public SignInService(Context context, ActivityResultLauncher<IntentSenderRequest> signInLauncher) {
         this.context = context;
@@ -163,5 +170,37 @@ public class SignInService {
                 }
             }
         }).start();
+    }
+    public boolean isSignedIn() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.contains(USER_KEY);
+    }
+    public void signOut() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        context.startActivity(intent);
+    }
+
+    public JSONObject getSignedInUser() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        String userJsonString = sharedPreferences.getString(USER_KEY, null);
+        if (userJsonString != null) {
+            try {
+                return new JSONObject(userJsonString);
+            } catch (Exception e) {
+                Log.e("SignInService", "Failed to parse user JSON", e);
+            }
+        }
+        return null;
+    }
+
+    public String getSignedInUserPhoto() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString("user_photo", null);
     }
 }

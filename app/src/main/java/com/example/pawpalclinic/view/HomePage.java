@@ -10,16 +10,20 @@ import android.graphics.Shader;
 import android.graphics.BitmapShader;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.example.pawpalclinic.R;
+import com.example.pawpalclinic.service.SignInService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import java.io.InputStream;
@@ -36,6 +40,11 @@ public class HomePage extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private Fragment currentFragment = null;
     private Map<Integer, Fragment> fragmentMap = new HashMap<>();
+    private boolean doubleBackToExitPressedOnce = false;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable resetDoubleBackFlag = () -> doubleBackToExitPressedOnce = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,14 +70,12 @@ public class HomePage extends AppCompatActivity {
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            if (itemId == R.id.nav_home) {
-                Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show();
-                // Handle home action
-            } else if (itemId == R.id.nav_profile) {
+            if (itemId == R.id.nav_ai_assistant) {
                 Intent intent = new Intent(this, AI_Assistant.class);
                 startActivity(intent);
                 // Handle profile action
-            } else if (itemId == R.id.nav_settings) {
+            } else if (itemId == R.id.nav_logout) {
+                new SignInService(getApplicationContext()).signOut();
                 // Handle settings action
             }
             drawerLayout.closeDrawers();
@@ -122,6 +129,19 @@ public class HomePage extends AppCompatActivity {
                     .add(R.id.fragment_container, currentFragment)
                     .commit();
         }
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (doubleBackToExitPressedOnce) {
+                    finish();
+                } else {
+                    doubleBackToExitPressedOnce = true;
+                    Toast.makeText(HomePage.this, "Click again to exit", Toast.LENGTH_SHORT).show();
+                    handler.postDelayed(resetDoubleBackFlag, 2000);
+                }
+            }
+        });
     }
 
     private static class LoadProfileImageTask extends AsyncTask<String, Void, Bitmap> {
