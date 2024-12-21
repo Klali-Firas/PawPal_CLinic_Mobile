@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -26,6 +27,10 @@ import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.service.SignInService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -58,25 +63,33 @@ public class HomePage extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Load profile picture URL from SharedPreferences
+        View headerView = navigationView.inflateHeaderView(R.layout.nav_header);
+        ImageView profileImageView = headerView.findViewById(R.id.profile_image);
+        TextView userNameTextView = headerView.findViewById(R.id.user_name);
+
+        // Load profile picture URL and user name from SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String imageUrl = sharedPreferences.getString(USER_PHOTO_KEY, null);
+        JSONObject user = new SignInService(getApplicationContext()).getSignedInUser();
+        String userName = user.optString("nom")+ " " + user.optString("prenom");
+
         if (imageUrl != null && !imageUrl.isEmpty()) {
             new LoadProfileImageTask(toolbar, navigationView).execute(imageUrl);
+            new LoadProfileImageDrawableTask(profileImageView).execute(imageUrl);
         } else {
             // Set a default image if no valid URL is found
-            toolbar.setNavigationIcon(R.drawable.ic_profile_placeholder);
+            profileImageView.setImageResource(R.drawable.ic_profile_placeholder);
         }
+
+        userNameTextView.setText(userName);
 
         navigationView.setNavigationItemSelectedListener(item -> {
             int itemId = item.getItemId();
             if (itemId == R.id.nav_ai_assistant) {
                 Intent intent = new Intent(this, AI_Assistant.class);
                 startActivity(intent);
-                // Handle profile action
             } else if (itemId == R.id.nav_logout) {
                 new SignInService(getApplicationContext()).signOut();
-                // Handle settings action
             }
             drawerLayout.closeDrawers();
             return true;
@@ -179,6 +192,52 @@ public class HomePage extends AppCompatActivity {
                 toolbar.setNavigationOnClickListener(v -> ((DrawerLayout) toolbar.getParent().getParent()).openDrawer(navigationView));
             } else {
                 toolbar.setNavigationIcon(R.drawable.ic_profile_placeholder);
+            }
+        }
+
+        private Bitmap getCircularBitmap(Bitmap bitmap) {
+            int size = Math.min(bitmap.getWidth(), bitmap.getHeight());
+            Bitmap output = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(output);
+
+            final Paint paint = new Paint();
+            final BitmapShader shader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+            paint.setShader(shader);
+            paint.setAntiAlias(true);
+
+            float radius = size / 2f;
+            canvas.drawCircle(radius, radius, radius, paint);
+
+            return output;
+        }
+
+    }
+    private static class LoadProfileImageDrawableTask extends AsyncTask<String, Void, Bitmap> {
+        private final ImageView imageView;
+
+        LoadProfileImageDrawableTask(ImageView imageView) {
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String url = urls[0];
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                return BitmapFactory.decodeStream(input);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            if (bitmap != null) {
+                Bitmap circularBitmap = getCircularBitmap(bitmap);
+                imageView.setImageBitmap(circularBitmap);
             }
         }
 
