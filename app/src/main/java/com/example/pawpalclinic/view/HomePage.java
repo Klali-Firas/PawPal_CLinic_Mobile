@@ -83,6 +83,7 @@ public class HomePage extends AppCompatActivity {
                 // Handle shop item
             } else if (itemId == R.id.nav_commandes) {
                 // Handle commandes item
+                selectedFragment = new CommandeFragment();
             }
 
             if (selectedFragment != null) {

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.CompletableFuture;
 
 public class CommandeService {
@@ -23,8 +24,11 @@ public class CommandeService {
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
 
+
+
     public CommandeService(Context context) {
         this.API_URL = context.getString(R.string.api_base_url) + "/api/public/commandes";
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     // Get all commandes
