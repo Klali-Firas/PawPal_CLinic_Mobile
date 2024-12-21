@@ -1,21 +1,26 @@
 package com.example.pawpalclinic.service;
 
 import android.content.Context;
-import android.util.Log;
 import com.example.pawpalclinic.R;
 import okhttp3.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class AIService {
 
     private String API_URL;
-    private final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client;
 
     public AIService(Context context) {
-        this.API_URL =  "http://10.0.2.2:1234/v1/chat/completions";
+        this.API_URL = "http://10.0.2.2:1234/v1/chat/completions";
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(0, TimeUnit.MILLISECONDS)
+                .readTimeout(0, TimeUnit.MILLISECONDS)
+                .writeTimeout(0, TimeUnit.MILLISECONDS)
+                .build();
     }
 
     public CompletableFuture<JSONObject> generateAIResponseForProprietaire(String prompt) {

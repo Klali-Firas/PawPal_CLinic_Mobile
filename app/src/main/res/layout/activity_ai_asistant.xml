@@ -35,7 +35,8 @@
                 android:id="@+id/messages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:padding="8dp" />
         </ScrollView>
 
         <LinearLayout
@@ -44,18 +45,28 @@
             android:orientation="horizontal"
             android:padding="8dp">
 
+            <!-- res/layout/activity_ai_asistant.xml -->
             <EditText
+                android:paddingHorizontal="15dp"
                 android:id="@+id/user_prompt"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:background="@drawable/rounded_edit_text"
+                android:textColorHint="@color/md_theme_onTertiaryContainer"
+                android:textColor="@color/md_theme_onTertiaryContainer"
+                android:layout_marginEnd="5dp"
                 android:hint="Type your message here..." />
 
             <Button
+                android:layout_weight="0"
                 android:id="@+id/send_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send" />
+                android:backgroundTint="@color/md_theme_tertiaryContainer"
+                android:textColor="@color/md_theme_onTertiaryContainer"
+                android:text="Send"
+                 />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
