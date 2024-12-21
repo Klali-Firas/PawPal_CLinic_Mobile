@@ -3,6 +3,7 @@ package com.example.pawpalclinic.view;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.controller.CommandeController;
 import com.example.pawpalclinic.controller.CommandeProduitController;
+import com.example.pawpalclinic.controller.ProduitController;
 import com.example.pawpalclinic.model.Commande;
 import com.example.pawpalclinic.model.CommandeProduit;
 import com.example.pawpalclinic.model.Produit;
@@ -93,7 +95,36 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
         updateTotalPrice();
     }
 
+    // cart.java
     private void confirmOrder() {
+        List<Produit> cartItems = cartService.getCart();
+        List<String> outOfStockProducts = new ArrayList<>();
+        ProduitController produitController = new ProduitController(this);
+
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+        for (Produit produit : cartItems) {
+            CompletableFuture<Void> future = produitController.getProduitById(produit.getId())
+                    .thenAccept(fetchedProduit -> {
+                        if (produit.getQuantity() > fetchedProduit.getQuantiteStock()) {
+                            outOfStockProducts.add(fetchedProduit.getNomProduit());
+                            Log.d("cart", "Not enough stock for: " + fetchedProduit);
+                        }
+                    });
+            futures.add(future);
+        }
+
+        CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenRun(() -> {
+            if (outOfStockProducts.isEmpty()) {
+                placeOrder();
+            } else {
+                String message = "Insufficient stock for: " + String.join(", ", outOfStockProducts);
+                runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
+            }
+        });
+    }
+
+    private void placeOrder() {
         Commande commande = new Commande(0, getUserIdFromSharedPreferences(), new Date(), "en_attente");
         CompletableFuture<Commande> createdCommandeFuture = commandeController.createCommande(commande);
 
