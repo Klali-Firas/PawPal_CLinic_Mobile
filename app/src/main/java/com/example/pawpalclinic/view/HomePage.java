@@ -258,3 +258,5 @@ public class HomePage extends AppCompatActivity {
         }
     }
 }
+
+//adb shell "cmd uimode night yes"
