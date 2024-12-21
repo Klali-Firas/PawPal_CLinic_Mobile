@@ -1,7 +1,7 @@
-// MyCommandeRecyclerViewAdapter.java
 package com.example.pawpalclinic.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.LayoutInflater;
@@ -15,6 +15,7 @@ import com.example.pawpalclinic.model.CommandeProduit;
 import com.example.pawpalclinic.model.Produit;
 import com.example.pawpalclinic.controller.CommandeProduitController;
 import com.example.pawpalclinic.controller.ProduitController;
+import com.google.gson.Gson;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -26,9 +27,12 @@ public class MyCommandeRecyclerViewAdapter extends RecyclerView.Adapter<MyComman
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy HH:mm", Locale.getDefault());
     private final CommandeProduitController commandeProduitController;
     private final ProduitController produitController;
+    private final Context context;
+    private final Gson gson = new Gson();
 
     public MyCommandeRecyclerViewAdapter(List<Commande> items, Context context) {
         mValues = items;
+        this.context = context;
         commandeProduitController = new CommandeProduitController(context);
         produitController = new ProduitController(context);
     }
@@ -50,6 +54,13 @@ public class MyCommandeRecyclerViewAdapter extends RecyclerView.Adapter<MyComman
             new Handler(Looper.getMainLooper()).post(() -> {
                 holder.mOrderTotalPriceView.setText(String.format(Locale.getDefault(), "%.2f TND", totalPrice));
             });
+        });
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, CommandeDetails.class);
+            String commandeJson = gson.toJson(commande);
+            intent.putExtra("commande_json", commandeJson);
+            context.startActivity(intent);
         });
     }
 
