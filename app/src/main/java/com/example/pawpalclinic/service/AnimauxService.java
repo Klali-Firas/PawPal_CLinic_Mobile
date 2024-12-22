@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +30,8 @@ import okhttp3.Response;
 public class AnimauxService {
 
     private final OkHttpClient client = new OkHttpClient();
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
+    private final SimpleDateFormat primaryDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
+    private final SimpleDateFormat fallbackDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
     private String API_URL;
 
     public AnimauxService(Context context) {
@@ -57,7 +59,7 @@ public class AnimauxService {
                         List<Animaux> animauxList = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            Date creeLe = dateFormat.parse(jsonObject.getString("creeLe"));
+                            Date creeLe = parseDate(jsonObject.getString("creeLe"));
                             Animaux animaux = new Animaux(
                                     jsonObject.getInt("id"),
                                     jsonObject.getInt("proprietaireId"),
@@ -99,7 +101,7 @@ public class AnimauxService {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        Date creeLe = dateFormat.parse(jsonObject.getString("creeLe"));
+                        Date creeLe = parseDate(jsonObject.getString("creeLe"));
                         Animaux animaux = new Animaux(
                                 jsonObject.getInt("id"),
                                 jsonObject.getInt("proprietaireId"),
@@ -130,7 +132,7 @@ public class AnimauxService {
             jsonObject.put("nom", animaux.getNom());
             jsonObject.put("race", animaux.getRace());
             jsonObject.put("age", animaux.getAge());
-            jsonObject.put("creeLe", dateFormat.format(animaux.getCreeLe()));
+            jsonObject.put("creeLe", primaryDateFormat.format(animaux.getCreeLe()));
         } catch (Exception e) {
             future.completeExceptionally(e);
             return future;
@@ -155,7 +157,7 @@ public class AnimauxService {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        Date creeLe = dateFormat.parse(jsonObject.getString("creeLe"));
+                        Date creeLe = parseDate(jsonObject.getString("creeLe"));
                         Animaux createdAnimaux = new Animaux(
                                 jsonObject.getInt("id"),
                                 jsonObject.getInt("proprietaireId"),
@@ -186,7 +188,7 @@ public class AnimauxService {
             jsonObject.put("nom", animaux.getNom());
             jsonObject.put("race", animaux.getRace());
             jsonObject.put("age", animaux.getAge());
-            jsonObject.put("creeLe", dateFormat.format(animaux.getCreeLe()));
+            jsonObject.put("creeLe", primaryDateFormat.format(animaux.getCreeLe()));
         } catch (Exception e) {
             future.completeExceptionally(e);
             return future;
@@ -211,7 +213,7 @@ public class AnimauxService {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        Date creeLe = dateFormat.parse(jsonObject.getString("creeLe"));
+                        Date creeLe = parseDate(jsonObject.getString("creeLe"));
                         Animaux updatedAnimaux = new Animaux(
                                 jsonObject.getInt("id"),
                                 jsonObject.getInt("proprietaireId"),
@@ -275,7 +277,7 @@ public class AnimauxService {
                         List<Animaux> animauxList = new ArrayList<>();
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            Date creeLe = dateFormat.parse(jsonObject.getString("creeLe"));
+                            Date creeLe = parseDate(jsonObject.getString("creeLe"));
                             Animaux animaux = new Animaux(
                                     jsonObject.getInt("id"),
                                     jsonObject.getInt("proprietaireId"),
@@ -296,5 +298,17 @@ public class AnimauxService {
             }
         });
         return future;
+    }
+    private Date parseDate(String dateString) {
+        try {
+            return primaryDateFormat.parse(dateString);
+        } catch (ParseException e) {
+            try {
+                return fallbackDateFormat.parse(dateString);
+            } catch (ParseException ex) {
+                Log.e("AnimauxService", "Error parsing date", ex);
+                return new Date(); // Default to current date if parsing fails
+            }
+        }
     }
 }

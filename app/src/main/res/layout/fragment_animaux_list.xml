@@ -8,11 +8,25 @@
     android:padding="16dp"
     tools:context=".view.AnimauxFragment">
 
-    <androidx.appcompat.widget.SearchView
-        android:id="@+id/search_view"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <androidx.appcompat.widget.SearchView
+        android:layout_weight="1"
+        android:id="@+id/search_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:queryHint="Search animals" />
+        <ImageButton
+            android:id="@+id/add_pet_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/baseline_add_24"
+            android:padding="11dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="@color/md_theme_onSurface" />
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"

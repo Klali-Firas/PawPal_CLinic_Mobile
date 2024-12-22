@@ -1,7 +1,9 @@
 package com.example.pawpalclinic.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.pawpalclinic.R;
+import com.example.pawpalclinic.controller.AnimauxController;
 import com.example.pawpalclinic.controller.RendezVousController;
 import com.example.pawpalclinic.controller.ServiceController;
 import com.example.pawpalclinic.model.Animaux;
@@ -27,12 +30,15 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class AnimalDetails extends AppCompatActivity {
+    private Animaux animaux;
 
     private static final String TAG = "AnimalDetails";
     private Gson gson = new Gson();
     private RendezVousController rendezVousController;
     private ServiceController serviceController;
     private LinearLayout rendezvousContainer;
+    private AnimauxController animauxController;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,28 +50,32 @@ public class AnimalDetails extends AppCompatActivity {
             return insets;
         });
 
+        animauxController = new AnimauxController(this);
+
         rendezVousController = new RendezVousController(this);
         serviceController = new ServiceController(this);
         rendezvousContainer = findViewById(R.id.rendezvous_container);
 
         // Get the animal details from the intent
         String animauxJson = getIntent().getStringExtra("animaux_json");
-        Animaux animaux = gson.fromJson(animauxJson, Animaux.class);
+        animaux = gson.fromJson(animauxJson, Animaux.class);
 
-        // Set the animal details to the views
-        TextView nameTextView = findViewById(R.id.animal_name);
-        TextView raceTextView = findViewById(R.id.animal_race);
-        TextView ageTextView = findViewById(R.id.animal_age);
 
-        nameTextView.setText(animaux.getNom());
-        raceTextView.setText(animaux.getRace());
-        ageTextView.setText(String.valueOf(animaux.getAge()) + " mois");
 
         // Fetch and display rendezvous history
-        fetchAndDisplayRendezvousHistory(animaux.getId());
+
+        ImageButton editButton = findViewById(R.id.edit_button);
+        editButton.setOnClickListener(v -> {
+            Intent intent = new Intent(AnimalDetails.this, EditAnimal.class);
+            intent.putExtra("animaux_json", gson.toJson(animaux));
+            startActivity(intent);
+        });
     }
 
+
+
     private void fetchAndDisplayRendezvousHistory(int animalId) {
+        rendezvousContainer.removeAllViews();
         Log.d(TAG, "Fetching rendezvous history for animal ID: " + animalId);
         rendezVousController.getAllRendezVous().thenAccept(rendezVousList -> {
             List<RendezVous> filteredRendezVousList = rendezVousList.stream()
@@ -84,6 +94,33 @@ public class AnimalDetails extends AppCompatActivity {
             }
         }).exceptionally(throwable -> {
             Log.e(TAG, "Error fetching rendezvous history", throwable);
+            return null;
+        });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadAnimalDetails();
+    }
+
+    private void loadAnimalDetails() {
+        animauxController.getAnimauxById(animaux.getId()).thenAccept(a -> {
+            animaux =  a; // Update the local variable
+            runOnUiThread(() -> {
+                // Set the animal details to the views
+                TextView nameTextView = findViewById(R.id.animal_name);
+                TextView raceTextView = findViewById(R.id.animal_race);
+                TextView ageTextView = findViewById(R.id.animal_age);
+
+                nameTextView.setText(animaux.getNom());
+                raceTextView.setText(animaux.getRace());
+                ageTextView.setText(String.valueOf(animaux.getAge()) + " mois");
+
+                // Fetch and display rendezvous history
+                fetchAndDisplayRendezvousHistory(animaux.getId());
+            });
+        }).exceptionally(throwable -> {
+            Log.e(TAG, "Error loading animal details", throwable);
             return null;
         });
     }

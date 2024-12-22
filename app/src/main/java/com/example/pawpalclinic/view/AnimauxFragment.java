@@ -1,6 +1,7 @@
 package com.example.pawpalclinic.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.widget.SearchView;
@@ -58,6 +60,8 @@ public class AnimauxFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
         animauxController = new AnimauxController(this.getContext());
+
+
     }
 
     @Override
@@ -78,7 +82,6 @@ public class AnimauxFragment extends Fragment {
         adapter = new MyAnimauxRecyclerViewAdapter(getContext(), animauxList);
         recyclerView.setAdapter(adapter);
 
-        loadData(context);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -93,10 +96,19 @@ public class AnimauxFragment extends Fragment {
                 return false;
             }
         });
-
+        ImageButton addPetButton = view.findViewById(R.id.add_pet_button);
+        addPetButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), EditAnimal.class);
+            startActivity(intent);
+        });
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadData(getContext());
+    }
     private void loadData(Context context) {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
