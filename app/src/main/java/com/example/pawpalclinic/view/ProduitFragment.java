@@ -145,6 +145,7 @@ public class ProduitFragment extends Fragment implements MyProduitRecyclerViewAd
             cartCount.setVisibility(View.VISIBLE);
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();

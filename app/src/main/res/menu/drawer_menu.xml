@@ -3,10 +3,10 @@
 
     <item
         android:id="@+id/nav_ai_assistant"
-        android:title="AI Assistant"
-        android:icon="@drawable/ic_ai_assistant" />
+        android:icon="@drawable/ic_ai_assistant"
+        android:title="AI Assistant" />
     <item
         android:id="@+id/nav_logout"
-        android:title="Logout"
-        android:icon="@drawable/ic_logout" />
+        android:icon="@drawable/ic_logout"
+        android:title="Logout" />
 </menu>

@@ -8,9 +8,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.service.AIService;
+
 import io.noties.markwon.Markwon;
 
 public class AI_Assistant extends AppCompatActivity {

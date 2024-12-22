@@ -3,16 +3,14 @@ package com.example.pawpalclinic.view;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.pawpalclinic.model.Animaux;
 import com.example.pawpalclinic.databinding.FragmentAnimauxBinding;
+import com.example.pawpalclinic.model.Animaux;
 import com.google.gson.Gson;
-
 
 import java.util.List;
 

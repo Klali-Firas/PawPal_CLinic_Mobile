@@ -90,6 +90,7 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
             checkoutButton.setEnabled(true);
         }
     }
+
     @Override
     public void onCartUpdated() {
         updateTotalPrice();
@@ -152,6 +153,7 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
             return null;
         });
     }
+
     private void showConfirmationDialog() {
         new MaterialAlertDialogBuilder(this)
                 .setTitle("Confirm Order")

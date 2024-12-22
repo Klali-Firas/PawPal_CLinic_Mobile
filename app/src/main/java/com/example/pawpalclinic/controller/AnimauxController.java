@@ -40,6 +40,7 @@ public class AnimauxController {
     public CompletableFuture<Void> deleteAnimaux(int id) {
         return animauxService.deleteAnimaux(id);
     }
+
     public CompletableFuture<List<Animaux>> getAnimauxByProprietaireId(int proprietaireId) {
         return animauxService.getAnimauxByProprietaireId(proprietaireId);
     }

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.model.Service;
-import okhttp3.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -14,10 +14,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class ServiceService {
 
-    private String API_URL;
     private final OkHttpClient client = new OkHttpClient();
+    private String API_URL;
 
     public ServiceService(Context context) {
         this.API_URL = context.getString(R.string.api_base_url) + "/api/public/services";

@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Shader;
-import android.graphics.BitmapShader;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,18 +23,17 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.service.SignInService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,7 +47,6 @@ public class HomePage extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce = false;
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable resetDoubleBackFlag = () -> doubleBackToExitPressedOnce = false;
-
 
 
     @Override
@@ -71,7 +69,7 @@ public class HomePage extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String imageUrl = sharedPreferences.getString(USER_PHOTO_KEY, null);
         JSONObject user = new SignInService(getApplicationContext()).getSignedInUser();
-        String userName = user.optString("nom")+ " " + user.optString("prenom");
+        String userName = user.optString("nom") + " " + user.optString("prenom");
 
         if (imageUrl != null && !imageUrl.isEmpty()) {
             new LoadProfileImageTask(toolbar, navigationView).execute(imageUrl);
@@ -212,6 +210,7 @@ public class HomePage extends AppCompatActivity {
         }
 
     }
+
     private static class LoadProfileImageDrawableTask extends AsyncTask<String, Void, Bitmap> {
         private final ImageView imageView;
 

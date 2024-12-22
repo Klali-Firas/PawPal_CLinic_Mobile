@@ -98,7 +98,6 @@ public class CartService {
     }
 
 
-
     public Produit getProductById(int productId) {
         synchronized (dbLock) {
             SQLiteDatabase db = dbHelper.getReadableDatabase();

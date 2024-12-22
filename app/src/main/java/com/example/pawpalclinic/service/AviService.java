@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.model.Avi;
-import okhttp3.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,11 +17,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class AviService {
 
-    private String API_URL;
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
+    private String API_URL;
 
     public AviService(Context context) {
         this.API_URL = context.getString(R.string.api_base_url) + "/api/public/avis";

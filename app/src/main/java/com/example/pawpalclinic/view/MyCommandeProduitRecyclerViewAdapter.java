@@ -4,10 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.model.CommandeProduit;
 import com.example.pawpalclinic.model.Produit;
+
 import java.util.List;
 import java.util.Locale;
 

@@ -3,6 +3,7 @@ package com.example.pawpalclinic.view;
 import android.os.Bundle;
 import android.util.Pair;
 import android.widget.TextView;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -10,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.controller.CommandeProduitController;
 import com.example.pawpalclinic.controller.ProduitController;
@@ -17,6 +19,7 @@ import com.example.pawpalclinic.model.Commande;
 import com.example.pawpalclinic.model.CommandeProduit;
 import com.example.pawpalclinic.model.Produit;
 import com.google.gson.Gson;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;

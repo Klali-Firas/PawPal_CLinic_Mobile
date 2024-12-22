@@ -8,8 +8,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
+
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.view.HomePage;
 import com.example.pawpalclinic.view.MainActivity;
@@ -18,7 +20,9 @@ import com.google.android.gms.auth.api.identity.Identity;
 import com.google.android.gms.auth.api.identity.SignInClient;
 import com.google.android.gms.auth.api.identity.SignInCredential;
 import com.google.android.gms.common.api.ApiException;
+
 import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -26,19 +30,19 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SignInService {
+    private static final String SHARED_PREFS_NAME = "user_prefs";
+    private static final String USER_KEY = "user";
     private final Context context;
     private final SignInClient signInClient;
     private final ActivityResultLauncher<IntentSenderRequest> signInLauncher;
-    private static final String SHARED_PREFS_NAME = "user_prefs";
-    private static final String USER_KEY = "user";
     private final String apiUrl;
 
-public SignInService(Context context) {
+    public SignInService(Context context) {
         this.context = context;
         this.signInClient = Identity.getSignInClient(context);
         this.signInLauncher = null;
         this.apiUrl = context.getString(R.string.api_base_url);
-}
+    }
 
     public SignInService(Context context, ActivityResultLauncher<IntentSenderRequest> signInLauncher) {
         this.context = context;
@@ -171,10 +175,12 @@ public SignInService(Context context) {
             }
         }).start();
     }
+
     public boolean isSignedIn() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.contains(USER_KEY);
     }
+
     public void signOut() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

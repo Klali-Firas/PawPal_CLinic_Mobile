@@ -1,22 +1,28 @@
 package com.example.pawpalclinic.service;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.model.Utilisateur;
-import okhttp3.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class UtilisateurService {
 
-    private  final String API_URL;
+    private final String API_URL;
     private final OkHttpClient client = new OkHttpClient();
 
     public UtilisateurService(Context c) {

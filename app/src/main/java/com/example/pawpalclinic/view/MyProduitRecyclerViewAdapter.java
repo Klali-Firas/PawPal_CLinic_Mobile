@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,20 +31,12 @@ import java.util.concurrent.Executors;
 
 public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduitRecyclerViewAdapter.ViewHolder> {
 
-    private List<Produit> mValues;
     private final OnItemClickListener listener;
     private final ExecutorService executorService;
     private final Handler mainHandler;
     private final int userId;
     private final CartUpdateListener cartUpdateListener;
-
-    public interface OnItemClickListener {
-        void onItemClick(Produit produit);
-    }
-
-    public interface CartUpdateListener {
-        void onCartUpdated();
-    }
+    private List<Produit> mValues;
 
     public MyProduitRecyclerViewAdapter(List<Produit> items, OnItemClickListener listener, int userId, CartUpdateListener cartUpdateListener) {
         mValues = items;
@@ -166,23 +157,6 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView productName;
-        public final TextView productDescription;
-        public final TextView productPrice;
-        public final Button addToCartButton;
-        public final ImageView productImage;
-
-        public ViewHolder(View view) {
-            super(view);
-            productName = view.findViewById(R.id.product_name);
-            productDescription = view.findViewById(R.id.product_description);
-            productPrice = view.findViewById(R.id.product_price);
-            addToCartButton = view.findViewById(R.id.add_to_cart_button);
-            productImage = view.findViewById(R.id.product_image);
-        }
-    }
-
     private void loadImage(String url, ImageView imageView) {
         executorService.execute(() -> {
             try {
@@ -201,5 +175,30 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
                 e.printStackTrace();
             }
         });
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(Produit produit);
+    }
+
+    public interface CartUpdateListener {
+        void onCartUpdated();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        public final TextView productName;
+        public final TextView productDescription;
+        public final TextView productPrice;
+        public final Button addToCartButton;
+        public final ImageView productImage;
+
+        public ViewHolder(View view) {
+            super(view);
+            productName = view.findViewById(R.id.product_name);
+            productDescription = view.findViewById(R.id.product_description);
+            productPrice = view.findViewById(R.id.product_price);
+            addToCartButton = view.findViewById(R.id.add_to_cart_button);
+            productImage = view.findViewById(R.id.product_image);
+        }
     }
 }

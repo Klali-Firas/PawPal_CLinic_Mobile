@@ -12,10 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -42,6 +40,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class AddRendezVousFragment extends Fragment {
 
+    private static final String SHARED_PREFS_NAME = "user_prefs";
+    private static final String USER_KEY = "user";
     private TextInputEditText inputName;
     private TextInputEditText inputLastName;
     private Spinner selectAnimal;
@@ -49,13 +49,10 @@ public class AddRendezVousFragment extends Fragment {
     private Spinner selectService;
     private Button btnSubmit;
     private TextView workingHoursText;
-
     private AnimauxController animauxController;
     private ServiceController serviceController;
     private RendezVousController rendezVousController;
     private Calendar calendar;
-    private static final String SHARED_PREFS_NAME = "user_prefs";
-    private static final String USER_KEY = "user";
 
     public AddRendezVousFragment() {
         // Required empty public constructor
@@ -120,7 +117,8 @@ public class AddRendezVousFragment extends Fragment {
         // Add text watcher to enable submit button when form is valid
         TextWatcher formTextWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -128,7 +126,8 @@ public class AddRendezVousFragment extends Fragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         };
 
         inputDate.addTextChangedListener(formTextWatcher);
@@ -212,7 +211,7 @@ public class AddRendezVousFragment extends Fragment {
 
         // Check if the selected time is within working hours
         if (dayOfWeek >= Calendar.MONDAY && dayOfWeek <= Calendar.THURSDAY) {
-            if ((hourOfDay < 8) || (hourOfDay == 8 && minute < 0) || ((hourOfDay >= 12 && minute >15) && hourOfDay < 14) || (hourOfDay >= 17) || (hourOfDay == 13)) {
+            if ((hourOfDay < 8) || (hourOfDay == 8 && minute < 0) || ((hourOfDay >= 12 && minute > 15) && hourOfDay < 14) || (hourOfDay >= 17) || (hourOfDay == 13)) {
                 return false;
             }
         } else if (dayOfWeek == Calendar.FRIDAY) {

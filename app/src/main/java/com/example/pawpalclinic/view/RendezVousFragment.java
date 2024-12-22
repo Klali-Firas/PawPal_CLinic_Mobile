@@ -8,17 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.controller.AnimauxController;
 import com.example.pawpalclinic.controller.RendezVousController;
 import com.example.pawpalclinic.controller.ServiceController;
 import com.example.pawpalclinic.model.Animaux;
 import com.example.pawpalclinic.model.RendezVous;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,6 +32,7 @@ public class RendezVousFragment extends Fragment {
     private static final String TAG = "RendezVousFragment";
     private static final String SHARED_PREFS_NAME = "user_prefs";
     private static final String USER_KEY = "user";
+    private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
@@ -36,7 +41,9 @@ public class RendezVousFragment extends Fragment {
     private AnimauxController animauxController;
     private RendezVousController rendezVousController;
     private ServiceController serviceController;
-    private static final String ARG_COLUMN_COUNT = "column-count";
+
+    public RendezVousFragment() {
+    }
 
     public static RendezVousFragment newInstance(int columnCount) {
         RendezVousFragment fragment = new RendezVousFragment();
@@ -44,9 +51,6 @@ public class RendezVousFragment extends Fragment {
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    public RendezVousFragment() {
     }
 
     @Override

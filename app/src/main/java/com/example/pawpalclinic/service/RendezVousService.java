@@ -5,9 +5,10 @@ import android.util.Log;
 
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.model.RendezVous;
-import okhttp3.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,18 +17,27 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class RendezVousService {
 
-    private final String API_URL ;
+    private final String API_URL;
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
     private final SimpleDateFormat dateRendezVousFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
 
 
     public RendezVousService(Context c) {
-        this.API_URL =  c.getString(R.string.api_base_url) + "/api/public/rendezvous";
+        this.API_URL = c.getString(R.string.api_base_url) + "/api/public/rendezvous";
 
     }
+
     // Get all rendezvous
     public CompletableFuture<List<RendezVous>> getAllRendezVous() {
         CompletableFuture<List<RendezVous>> future = new CompletableFuture<>();

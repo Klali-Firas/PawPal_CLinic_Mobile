@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,16 +31,13 @@ import java.util.concurrent.Executors;
 
 public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerViewAdapter.ViewHolder> {
 
-    public List<Produit> mValues;
     private final Context context;
     private final CartService cartService;
     private final ExecutorService executorService;
     private final Handler mainHandler;
     private final CartUpdateListener cartUpdateListener;
+    public List<Produit> mValues;
     private boolean isRemovingItem = false;
-    public interface CartUpdateListener {
-        void onCartUpdated();
-    }
 
     public CartRecyclerViewAdapter(Context context, List<Produit> items, CartService cartService, CartUpdateListener cartUpdateListener) {
         this.context = context;
@@ -141,6 +137,31 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         return mValues.size();
     }
 
+    private void loadImage(String url, ImageView imageView) {
+        executorService.execute(() -> {
+            try {
+                URL urlConnection = new URL(url);
+                HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                InputStream input = connection.getInputStream();
+                Bitmap bitmap = BitmapFactory.decodeStream(input);
+                mainHandler.post(() -> {
+                    if (bitmap != null) {
+                        imageView.setImageBitmap(bitmap);
+                    }
+                });
+                isRemovingItem = false;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public interface CartUpdateListener {
+        void onCartUpdated();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final TextView productName;
         public final TextView productUnitPrice;
@@ -162,26 +183,5 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
             buttonIncreaseQuantity = view.findViewById(R.id.button_increase_quantity);
             buttonRemove = view.findViewById(R.id.button_remove);
         }
-    }
-
-    private void loadImage(String url, ImageView imageView) {
-        executorService.execute(() -> {
-            try {
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection.openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap bitmap = BitmapFactory.decodeStream(input);
-                mainHandler.post(() -> {
-                    if (bitmap != null) {
-                        imageView.setImageBitmap(bitmap);
-                    }
-                });
-                isRemovingItem = false;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 }

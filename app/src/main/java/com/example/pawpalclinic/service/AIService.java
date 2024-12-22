@@ -1,18 +1,26 @@
 package com.example.pawpalclinic.service;
 
 import android.content.Context;
-import com.example.pawpalclinic.R;
-import okhttp3.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 public class AIService {
 
-    private String API_URL;
     private final OkHttpClient client;
+    private String API_URL;
 
     public AIService(Context context) {
         this.API_URL = "http://10.0.2.2:1234/v1/chat/completions";

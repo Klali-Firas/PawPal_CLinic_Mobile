@@ -1,15 +1,16 @@
 package com.example.pawpalclinic.view;
 
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.pawpalclinic.controller.ServiceController;
-import com.example.pawpalclinic.model.RendezVous;
-import com.example.pawpalclinic.databinding.FragmentRendezVousBinding;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.pawpalclinic.controller.AnimauxController;
+import com.example.pawpalclinic.controller.ServiceController;
+import com.example.pawpalclinic.databinding.FragmentRendezVousBinding;
 import com.example.pawpalclinic.model.Animaux;
+import com.example.pawpalclinic.model.RendezVous;
 import com.example.pawpalclinic.model.Service;
 
 import java.text.SimpleDateFormat;
@@ -77,6 +78,7 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
             return null;
         });
     }
+
     @Override
     public int getItemCount() {
         return mValues.size();

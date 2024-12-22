@@ -10,15 +10,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.controller.AnimauxController;
 import com.example.pawpalclinic.model.Animaux;
+
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -27,14 +31,14 @@ public class AnimauxFragment extends Fragment {
 
     private static final String TAG = "AnimauxFragment";
     private static final String ARG_COLUMN_COUNT = "column-count";
+    private static final String SHARED_PREFS_NAME = "user_prefs";
+    private static final String USER_KEY = "user";
     private int mColumnCount = 1;
     private AnimauxController animauxController;
     private MyAnimauxRecyclerViewAdapter adapter;
     private List<Animaux> animauxList = new ArrayList<>();
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
-    private static final String SHARED_PREFS_NAME = "user_prefs";
-    private static final String USER_KEY = "user";
 
     public AnimauxFragment() {
     }

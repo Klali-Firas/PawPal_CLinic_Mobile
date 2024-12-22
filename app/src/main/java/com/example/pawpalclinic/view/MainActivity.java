@@ -4,7 +4,6 @@ package com.example.pawpalclinic.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
@@ -42,11 +41,6 @@ public class MainActivity extends AppCompatActivity {
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(v -> signInService.signIn());
 
-        Button navButton = (Button)findViewById(R.id.navButton);
-        navButton.setOnClickListener(v -> {
-            Log.i("MainActivity", "Navigating to Home Page");
-            startActivity(new Intent(MainActivity.this, HomePage.class));
-        });
 
     }
 

@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class CartDatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "cart.db";
-    private static final int DATABASE_VERSION = 3;
-
     public static final String TABLE_CART = "cart";
     public static final String COLUMN_USER_ID = "user_id";
     public static final String COLUMN_ID = "id";
@@ -17,7 +14,8 @@ public class CartDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PRICE = "price";
     public static final String COLUMN_QUANTITY = "quantity";
     public static final String COLUMN_IMAGE = "image";
-
+    private static final String DATABASE_NAME = "cart.db";
+    private static final int DATABASE_VERSION = 3;
     private static final String TABLE_CREATE =
             "CREATE TABLE " + TABLE_CART + " (" +
                     COLUMN_USER_ID + " INTEGER, " +
