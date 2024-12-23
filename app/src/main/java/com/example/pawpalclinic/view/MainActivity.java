@@ -2,8 +2,11 @@
 package com.example.pawpalclinic.view;
 
 import android.content.Intent;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
@@ -39,6 +42,17 @@ public class MainActivity extends AppCompatActivity {
         }
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
+
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View view = signInButton.getChildAt(i);
+            if (view instanceof TextView) {
+                TextView textView = (TextView) view;
+                textView.setText("Se connecter avec Google");
+                break;
+            }
+        }
+
+
         signInButton.setOnClickListener(v -> signInService.signIn());
     }
 }
