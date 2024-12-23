@@ -61,7 +61,7 @@ public class CommandeDetails extends AppCompatActivity {
         orderDateTextView.setText(dateFormat.format(commande.getDateCommande()));
         orderStatusTextView.setText(commande.getStatut());
         calculateTotalPrice(commande).thenAccept(totalPrice -> {
-            orderTotalPriceTextView.setText(String.format(Locale.getDefault(), "%.2f TND", totalPrice));
+            orderTotalPriceTextView.setText(String.format(Locale.getDefault(), "Prix Total : %.2f TND", totalPrice));
         });
 
         // Setup RecyclerView

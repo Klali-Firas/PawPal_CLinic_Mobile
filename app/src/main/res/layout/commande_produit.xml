@@ -5,34 +5,55 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     app:cardCornerRadius="8dp"
-    app:cardElevation="4dp">
+    app:cardElevation="4dp"
+    app:strokeColor="@android:color/transparent"
+    app:strokeWidth="0dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/md_theme_surfaceContainer"
         android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/product_image"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/baseline_pets_24"
+            android:contentDescription="@string/product_image"
+             />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/product_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="Product Name"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/unit_price"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+             />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/unit_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="Unit Price"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/quantity"
-            app:layout_constraintStart_toEndOf="@id/product_name"
-            app:layout_constraintTop_toTopOf="parent" />
+        />
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="x"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/quantity"
@@ -40,21 +61,15 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="Quantity"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/total_price"
-            app:layout_constraintStart_toEndOf="@id/unit_price"
-            app:layout_constraintTop_toTopOf="parent" />
-
+         /></LinearLayout>
+        </LinearLayout>
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/total_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Total Price"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/quantity"
-            app:layout_constraintTop_toTopOf="parent" />
+            />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.cardview.widget.CardView>
