@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.pawpalclinic.R;
 import com.example.pawpalclinic.controller.AnimauxController;
 import com.example.pawpalclinic.controller.AviController;
+import com.example.pawpalclinic.controller.RendezVousController;
 import com.example.pawpalclinic.controller.ServiceController;
 import com.example.pawpalclinic.databinding.FragmentRendezVousBinding;
 import com.example.pawpalclinic.model.Animaux;
@@ -69,14 +70,42 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
         }
 
         loadDataFromController(holder.mItem, holder);
-        holder.itemView.setOnClickListener(v-> {});
+
+        holder.itemView.setOnClickListener(v->{});
+
         // Handle click event for "Termine" status
         if ("termine".equals(mValues.get(position).getStatut())) {
             holder.itemView.setOnClickListener(v -> showAviDialog(holder.mItem, holder));
+        } else if ("en_attente".equals(mValues.get(position).getStatut())) {
+            holder.itemView.setOnClickListener(v -> showCancelDialog(holder.mItem, holder));
         }
     }
 
+    private void showCancelDialog(RendezVous rendezVous, ViewHolder holder) {
+        new MaterialAlertDialogBuilder(context)
+                .setTitle("Cancel Rendezvous")
+                .setMessage("Do you want to cancel this rendezvous?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    rendezVous.setStatut("annule");
+                    new RendezVousController(context).updateRendezVous(rendezVous.getId(), rendezVous)
+                            .thenAccept(updatedRendezVous -> {
+                                ((Activity) context).runOnUiThread(() -> {
+                                    Toast.makeText(context, "Rendezvous cancelled", Toast.LENGTH_SHORT).show();
+                                    notifyDataSetChanged();
+                                });
+                            }).exceptionally(throwable -> {
+                                ((Activity) context).runOnUiThread(() -> {
+                                    Toast.makeText(context, "Error cancelling rendezvous: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                                return null;
+                            });
+                })
+                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .show();
+    }
+
     private void loadDataFromController(RendezVous rendezVous, ViewHolder holder) {
+
         // Fetch service name using motif (service id)
         int serviceId = rendezVous.getMotif();
         CompletableFuture<Service> serviceFuture = serviceController.getServiceById(serviceId);

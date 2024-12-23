@@ -257,17 +257,17 @@ public class RendezVousService {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        Date dateRendezVous = dateFormat.parse(jsonObject.getString("dateRendezVous"));
+                        Date dateRendezVous = dateRendezVousFormat.parse(jsonObject.getString("dateRendezVous"));
                         Date creeLe = jsonObject.has("creeLe") ? dateFormat.parse(jsonObject.getString("creeLe")) : null;
                         RendezVous updatedRendezVous = new RendezVous(
                                 jsonObject.getInt("id"),
                                 jsonObject.getInt("animalId"),
-                                jsonObject.has("veterinaireId") ? jsonObject.getInt("veterinaireId") : null,
+                                jsonObject.has("veterinaireId") && !jsonObject.isNull("veterinaireId") ? jsonObject.getInt("veterinaireId") : null,
                                 dateRendezVous,
                                 jsonObject.getString("statut"),
                                 jsonObject.getInt("motif"),
                                 creeLe,
-                                jsonObject.has("remarques") ? jsonObject.getString("remarques") : null
+                                jsonObject.has("remarques") && !jsonObject.isNull("remarques") ? jsonObject.getString("remarques") : null
                         );
                         future.complete(updatedRendezVous);
                     } catch (Exception e) {
