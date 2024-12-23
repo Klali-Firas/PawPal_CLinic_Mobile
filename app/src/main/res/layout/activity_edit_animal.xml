@@ -7,13 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="16dp"
     tools:context=".view.EditAnimal">
 
+    <ImageView
+        android:layout_width="274dp"
+        android:layout_height="284dp"
+        android:src="@drawable/owner_holding_dog" />
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Animal Name">
+        android:hint="@string/animal_name">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/animal_name_input"
             android:layout_width="match_parent"
@@ -23,7 +28,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Animal Race">
+        android:hint="@string/animal_race">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/animal_race_input"
             android:layout_width="match_parent"
@@ -33,7 +38,8 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Animal Age">
+        app:suffixText="mois"
+        android:hint="@string/animal_age">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/animal_age_input"
             android:layout_width="match_parent"
@@ -42,10 +48,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
+        app:cornerRadius="4dp"
         android:id="@+id/save_button"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@string/add_animal_or_edit_animal"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"/>
 </LinearLayout>

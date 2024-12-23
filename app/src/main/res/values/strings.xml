@@ -61,4 +61,8 @@
     <string name="working_hours_mon_thu_08_00_12_00_14_00_17_00_fri_08_00_14_00">Working Hours: Mon-Thu 08:00-12:00, 14:00-17:00; Fri 08:00-14:00</string>
     <string name="date_and_time">Date and Time</string>
     <string name="submit_add_rendez_vous">Submit</string>
+    <string name="add_animal_or_edit_animal">Save</string>
+    <string name="animal_race">Animal Race</string>
+    <string name="animal_name">Animal Name</string>
+    <string name="animal_age">Animal Age</string>
 </resources>
