@@ -72,7 +72,7 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
                 e.printStackTrace();
             }
         }
-        return -1; // Default value if user ID is not found
+        return -1; // Valeur par défaut si l'ID utilisateur n'est pas trouvé
     }
 
     private void updateTotalPrice() {
@@ -97,7 +97,6 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
         updateTotalPrice();
     }
 
-    // cart.java
     private void confirmOrder() {
         List<Produit> cartItems = cartService.getCart();
         List<String> outOfStockProducts = new ArrayList<>();
@@ -110,7 +109,7 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
                     .thenAccept(fetchedProduit -> {
                         if (produit.getQuantity() > fetchedProduit.getQuantiteStock()) {
                             outOfStockProducts.add(fetchedProduit.getNomProduit());
-                            Log.d("cart", "Not enough stock for: " + fetchedProduit);
+                            Log.d("cart", "Pas assez de stock pour : " + fetchedProduit);
                         }
                     });
             futures.add(future);
@@ -120,7 +119,7 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
             if (outOfStockProducts.isEmpty()) {
                 placeOrder();
             } else {
-                String message = "Insufficient stock for: " + String.join(", ", outOfStockProducts);
+                String message = "Stock insuffisant pour : " + String.join(", ", outOfStockProducts);
                 runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_LONG).show());
             }
         });
@@ -138,37 +137,37 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
 
             for (CommandeProduit commandeProduit : order) {
                 commandeProduitController.createCommandeProduit(commandeProduit).thenAccept(result -> {
-                    System.out.println("Order item confirmed!");
+                    System.out.println("Article de commande confirmé !");
                 }).exceptionally(error -> {
-                    System.err.println("Error saving order item: " + error.getMessage());
+                    System.err.println("Erreur lors de l'enregistrement de l'article de commande : " + error.getMessage());
                     return null;
                 });
             }
 
             runOnUiThread(() -> {
-                clearCart(); // Clear the cart and update the UI
-                Toast.makeText(this, "Order placed successfully!", Toast.LENGTH_SHORT).show();
+                clearCart(); // Vider le panier et mettre à jour l'interface utilisateur
+                Toast.makeText(this, "Commande passée avec succès !", Toast.LENGTH_SHORT).show();
             });
         }).exceptionally(error -> {
-            System.err.println("Error creating order: " + error.getMessage());
+            System.err.println("Erreur lors de la création de la commande : " + error.getMessage());
             return null;
         });
     }
 
     private void showConfirmationDialog() {
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Confirm Order")
-                .setMessage("Are you sure you want to place this order?")
-                .setIcon(R.drawable.ic_confirmation) // Use a suitable icon
-                .setPositiveButton("Yes", (dialog, whichButton) -> confirmOrder())
-                .setNegativeButton("No", null)
+                .setTitle("Confirmer la commande")
+                .setMessage("Êtes-vous sûr de vouloir passer cette commande ?")
+                .setIcon(R.drawable.ic_confirmation) // Utiliser une icône appropriée
+                .setPositiveButton("Oui", (dialog, whichButton) -> confirmOrder())
+                .setNegativeButton("Non", null)
                 .show();
     }
 
     private void clearCart() {
         cartService.clearCart();
-        adapter.mValues.clear(); // Clear the adapter's data
-        adapter.notifyDataSetChanged(); // Notify the adapter to refresh the UI
-        updateTotalPrice(); // Update the total price
+        adapter.mValues.clear(); // Vider les données de l'adaptateur
+        adapter.notifyDataSetChanged(); // Notifier l'adaptateur pour rafraîchir l'interface utilisateur
+        updateTotalPrice(); // Mettre à jour le prix total
     }
 }

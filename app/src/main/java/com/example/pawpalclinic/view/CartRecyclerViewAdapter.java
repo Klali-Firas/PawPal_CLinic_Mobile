@@ -72,12 +72,12 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
         holder.editQuantity.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No action needed
+                // Pas d'action nécessaire
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // No action needed
+                // Pas d'action nécessaire
             }
 
             @Override
@@ -87,14 +87,14 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
                 }
 
                 try {
-                    Log.d("CartRecyclerViewAdapter", "Quantity changed: " + s.toString());
+                    Log.d("CartRecyclerViewAdapter", "Quantité modifiée: " + s.toString());
                     int quantity = Integer.parseInt(s.toString());
                     produit.setQuantity(quantity);
                     cartService.addToCart(produit);
                     holder.productTotalPrice.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * quantity));
                     cartUpdateListener.onCartUpdated();
                 } catch (NumberFormatException e) {
-                    // Handle invalid number format
+                    // Gérer le format de nombre invalide
                 }
             }
         });

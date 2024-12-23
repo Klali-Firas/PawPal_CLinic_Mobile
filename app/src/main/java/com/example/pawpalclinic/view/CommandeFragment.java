@@ -51,12 +51,12 @@ public class CommandeFragment extends Fragment {
         adapter = new MyCommandeRecyclerViewAdapter(commandesList, getContext());
         recyclerView.setAdapter(adapter);
 
-        loadUserOrders();
+        chargerCommandesUtilisateur();
 
         return view;
     }
 
-    private void loadUserOrders() {
+    private void chargerCommandesUtilisateur() {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
 

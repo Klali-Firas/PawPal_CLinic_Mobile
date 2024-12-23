@@ -41,7 +41,7 @@ public class EditAnimal extends AppCompatActivity {
 
         animauxController = new AnimauxController(this);
 
-        // Retrieve the current authenticated user's ID
+        // Récupérer l'ID de l'utilisateur authentifié actuel
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String userJsonString = sharedPreferences.getString(USER_KEY, null);
         if (userJsonString != null) {
@@ -61,12 +61,12 @@ public class EditAnimal extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent.hasExtra("animaux_json")) {
-            // Update existing animal
+            // Mettre à jour l'animal existant
             String animauxJson = intent.getStringExtra("animaux_json");
             currentAnimal = new Gson().fromJson(animauxJson, Animaux.class);
             populateFields(currentAnimal);
         } else {
-            // Add new animal
+            // Ajouter un nouvel animal
             currentAnimal = null;
         }
 
@@ -115,7 +115,7 @@ public class EditAnimal extends AppCompatActivity {
         int age = Integer.parseInt(ageInput.getText().toString());
 
         if (currentAnimal == null) {
-            // Add new animal
+            // Ajouter un nouvel animal
             Animaux newAnimal = new Animaux(0, proprietaireId, name, race, age, new Date());
             CompletableFuture<Animaux> future = animauxController.createAnimaux(newAnimal);
             future.thenAccept(animal -> runOnUiThread(() -> {
@@ -126,7 +126,7 @@ public class EditAnimal extends AppCompatActivity {
                 return null;
             });
         } else {
-            // Update existing animal
+            // Mettre à jour l'animal existant
             currentAnimal.setNom(name);
             currentAnimal.setRace(race);
             currentAnimal.setAge(age);

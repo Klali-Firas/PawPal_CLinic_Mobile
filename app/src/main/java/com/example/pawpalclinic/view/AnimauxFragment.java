@@ -60,8 +60,6 @@ public class AnimauxFragment extends Fragment {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
         animauxController = new AnimauxController(this.getContext());
-
-
     }
 
     @Override
@@ -81,7 +79,6 @@ public class AnimauxFragment extends Fragment {
 
         adapter = new MyAnimauxRecyclerViewAdapter(getContext(), animauxList);
         recyclerView.setAdapter(adapter);
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -109,6 +106,7 @@ public class AnimauxFragment extends Fragment {
         super.onResume();
         loadData(getContext());
     }
+
     private void loadData(Context context) {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
@@ -130,15 +128,15 @@ public class AnimauxFragment extends Fragment {
                         recyclerView.setVisibility(View.VISIBLE);
                     });
                 }).exceptionally(throwable -> {
-                    Log.e(TAG, "Error loading data", throwable);
+                    Log.e(TAG, "Erreur lors du chargement des données", throwable);
                     new Handler(Looper.getMainLooper()).post(() -> {
                         progressBar.setVisibility(View.GONE);
-                        // Optionally show an error message to the user
+                        // Optionnellement afficher un message d'erreur à l'utilisateur
                     });
                     return null;
                 });
             } catch (Exception e) {
-                Log.e(TAG, "Error parsing user JSON", e);
+                Log.e(TAG, "Erreur lors de l'analyse du JSON utilisateur", e);
                 progressBar.setVisibility(View.GONE);
             }
         } else {

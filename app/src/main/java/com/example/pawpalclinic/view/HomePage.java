@@ -65,7 +65,7 @@ public class HomePage extends AppCompatActivity {
         ImageView profileImageView = headerView.findViewById(R.id.profile_image);
         TextView userNameTextView = headerView.findViewById(R.id.user_name);
 
-        // Load profile picture URL and user name from SharedPreferences
+        // Charger l'URL de la photo de profil et le nom de l'utilisateur à partir de SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS_NAME, MODE_PRIVATE);
         String imageUrl = sharedPreferences.getString(USER_PHOTO_KEY, null);
         JSONObject user = new SignInService(getApplicationContext()).getSignedInUser();
@@ -75,7 +75,7 @@ public class HomePage extends AppCompatActivity {
             new LoadProfileImageTask(toolbar, navigationView).execute(imageUrl);
             new LoadProfileImageDrawableTask(profileImageView).execute(imageUrl);
         } else {
-            // Set a default image if no valid URL is found
+            // Définir une image par défaut si aucune URL valide n'est trouvée
             profileImageView.setImageResource(R.drawable.ic_profile_placeholder);
         }
 
@@ -94,7 +94,7 @@ public class HomePage extends AppCompatActivity {
         });
 
         bottomNavigationView.setOnItemReselectedListener(item -> {
-            // Do nothing when reselected
+            // Ne rien faire lors de la resélection
         });
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -132,7 +132,7 @@ public class HomePage extends AppCompatActivity {
             return true;
         });
 
-        // Set default fragment
+        // Définir le fragment par défaut
         if (savedInstanceState == null) {
             currentFragment = AnimauxFragment.newInstance(1);
             fragmentMap.put(R.id.nav_animaux, currentFragment);
@@ -148,7 +148,7 @@ public class HomePage extends AppCompatActivity {
                     finish();
                 } else {
                     doubleBackToExitPressedOnce = true;
-                    Toast.makeText(HomePage.this, "Click again to exit", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(HomePage.this, "Cliquez à nouveau pour quitter", Toast.LENGTH_SHORT).show();
                     handler.postDelayed(resetDoubleBackFlag, 2000);
                 }
             }
@@ -257,5 +257,3 @@ public class HomePage extends AppCompatActivity {
         }
     }
 }
-
-//adb shell "cmd uimode night yes"

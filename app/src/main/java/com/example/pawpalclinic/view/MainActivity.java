@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<IntentSenderRequest> signInLauncher = registerForActivityResult(
             new ActivityResultContracts.StartIntentSenderForResult(),
             result -> {
-                Log.i("MainActivity", "Activity result received.");
+                Log.i("MainActivity", "Résultat de l'activité reçu.");
                 signInService.handleSignInResult(result.getResultCode(), result.getData());
             }
     );
@@ -40,9 +40,5 @@ public class MainActivity extends AppCompatActivity {
 
         SignInButton signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(v -> signInService.signIn());
-
-
     }
-
-
 }

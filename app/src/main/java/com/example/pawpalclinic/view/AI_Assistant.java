@@ -67,12 +67,12 @@ public class AI_Assistant extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        params.setMargins(8, 8, 8, 24); // Add bottom margin
+        params.setMargins(8, 8, 8, 24); // Ajouter une marge inférieure
         params.gravity = isUser ? Gravity.END : Gravity.START;
         messageView.setLayoutParams(params);
         messageView.setMaxWidth((int) (getResources().getDisplayMetrics().widthPixels * 0.75));
 
-        // Set padding directly on the TextView
+        // Définir le padding directement sur le TextView
         int padding = (int) (12 * getResources().getDisplayMetrics().density);
         messageView.setPadding(padding, padding, padding, padding);
         messageView.setTextColor(getResources().getColor(R.color.md_theme_onPrimaryContainer, getTheme()));
@@ -92,13 +92,13 @@ public class AI_Assistant extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        params.setMargins(8, 8, 8, 24); // Add bottom margin
+        params.setMargins(8, 8, 8, 24); // Ajouter une marge inférieure
         params.gravity = isUser ? Gravity.END : Gravity.START;
         messageView.setLayoutParams(params);
         messageView.setMaxWidth((int) (getResources().getDisplayMetrics().widthPixels * 0.75));
         messageView.setTextColor(getResources().getColor(R.color.md_theme_onSecondaryContainer, getTheme()));
 
-        // Set padding directly on the TextView
+        // Définir le padding directement sur le TextView
         int padding = (int) (12 * getResources().getDisplayMetrics().density);
         messageView.setPadding(padding, padding, padding, padding);
 
