@@ -16,7 +16,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:queryHint="Search products" />
+            android:queryHint="chercher un produit" />
 
         <FrameLayout
             android:layout_width="wrap_content"

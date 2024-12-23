@@ -119,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:text="Total: 0 TND"
                 android:layout_weight="1"
-                android:textSize="18sp"
+                android:textSize="17sp"
                 android:textStyle="bold"
                />
 

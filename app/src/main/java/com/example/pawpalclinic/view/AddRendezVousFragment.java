@@ -85,7 +85,7 @@ public class AddRendezVousFragment extends Fragment {
         workingHoursText = view.findViewById(R.id.working_hours_text);
 
         // Set working hours text
-        workingHoursText.setText("Working Hours:\nMon-Thu 08:00-12:00, 14:00-17:00;\nFri 08:00-14:00");
+        workingHoursText.setText("Heures d'ouverture :\nLun-Jeu 08:00-12:00, 14:00-17:00;\nVen 08:00-14:00");
 
         // Retrieve user data from SharedPreferences
         SharedPreferences sharedPreferences = getContext().getSharedPreferences(SHARED_PREFS_NAME, Context.MODE_PRIVATE);
@@ -152,11 +152,11 @@ public class AddRendezVousFragment extends Fragment {
                     });
                 });
             } else {
-                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "No animals found", Toast.LENGTH_SHORT).show());
+                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "Aucun animal trouvé", Toast.LENGTH_SHORT).show());
             }
         }).exceptionally(throwable -> {
             requireActivity().runOnUiThread(() -> {
-                Toast.makeText(getContext(), "Error loading animals. Retrying...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Erreur lors du chargement des animaux. Réessayer...", Toast.LENGTH_SHORT).show();
                 loadAnimals(); // Retry loading animals
             });
             return null;
@@ -179,11 +179,11 @@ public class AddRendezVousFragment extends Fragment {
                     });
                 });
             } else {
-                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "No services found", Toast.LENGTH_SHORT).show());
+                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "Aucun service trouvé", Toast.LENGTH_SHORT).show());
             }
         }).exceptionally(throwable -> {
             requireActivity().runOnUiThread(() -> {
-                Toast.makeText(getContext(), "Error loading services. Retrying...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Erreur lors du chargement des services. Réessayer...", Toast.LENGTH_SHORT).show();
                 loadServices(); // Retry loading services
             });
             return null;
@@ -211,7 +211,7 @@ public class AddRendezVousFragment extends Fragment {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm", Locale.getDefault());
                     inputDate.setText(sdf.format(calendar.getTime()));
                 } else {
-                    Toast.makeText(getContext(), "Selected date/time is not within working hours", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "La date/heure sélectionnée n'est pas dans les heures de travail", Toast.LENGTH_SHORT).show();
                     inputDate.setText("");
                 }
             }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
@@ -277,7 +277,7 @@ public class AddRendezVousFragment extends Fragment {
         }
 
         if (selectedAnimalPosition == -1 || selectedServicePosition == -1 || inputDate.getText().toString().isEmpty()) {
-            Toast.makeText(getContext(), "Please fill all fields and select a valid date/time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "Veuillez remplir tous les champs et sélectionner une date/heure valide", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -302,18 +302,18 @@ public class AddRendezVousFragment extends Fragment {
 
     private void showConfirmationDialog(RendezVous rendezVous, Animaux selectedAnimal, Service selectedService) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm", Locale.getDefault());
-        String message = "Animal: " + selectedAnimal.getNom() + " (" + selectedAnimal.getRace() + ")\n" +
-                "Service: " + selectedService.getNomService() + "\n" +
-                "Date: " + sdf.format(rendezVous.getDateRendezVous()) + "\n";
+        String message = "Animal : " + selectedAnimal.getNom() + " (" + selectedAnimal.getRace() + ")\n" +
+                "Service : " + selectedService.getNomService() + "\n" +
+                "Date : " + sdf.format(rendezVous.getDateRendezVous()) + "\n";
 
         new MaterialAlertDialogBuilder(getContext())
-                .setTitle("Confirm RendezVous")
+                .setTitle("Confirmer le RendezVous")
                 .setMessage(message)
                 .setIcon(R.drawable.ic_confirmation) // Add your confirmation icon here
-                .setPositiveButton("Confirm", (dialog, which) -> {
+                .setPositiveButton("Confirmer", (dialog, which) -> {
                     // Create rendezvous
                     rendezVousController.createRendezVous(rendezVous);
-                    Toast.makeText(getContext(), "RendezVous created successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "RendezVous créé avec succès", Toast.LENGTH_SHORT).show();
 
                     // Reset form
                     selectAnimal.setText("");
@@ -321,7 +321,7 @@ public class AddRendezVousFragment extends Fragment {
                     inputDate.setText("");
                     btnSubmit.setEnabled(false);
                 })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton("Annuler", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 }

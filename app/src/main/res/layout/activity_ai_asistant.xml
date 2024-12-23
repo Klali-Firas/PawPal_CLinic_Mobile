@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="16dp"
-            android:text="AI Assistance"
+            android:text="@string/ai_assistance"
             android:textSize="18sp" />
 
         <ScrollView
@@ -49,9 +49,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
                 android:layout_weight="1"
+                android:paddingVertical="9dp"
                 android:background="@drawable/rounded_edit_text"
-                android:hint="Type your message here..."
+                android:hint="@string/type_your_message_here"
                 android:paddingHorizontal="15dp"
+                android:textSize="14sp"
                 android:textColor="@color/md_theme_onTertiaryContainer"
                 android:textColorHint="@color/md_theme_onTertiaryContainer" />
 
@@ -60,8 +62,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
+                android:minWidth="0dp"
                 android:backgroundTint="@color/md_theme_tertiaryContainer"
-                android:text="Send"
+                android:text="@string/send"
                 android:textColor="@color/md_theme_onTertiaryContainer" />
         </LinearLayout>
     </LinearLayout>
