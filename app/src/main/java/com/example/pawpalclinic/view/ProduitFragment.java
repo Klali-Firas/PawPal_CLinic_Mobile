@@ -94,7 +94,7 @@ public class ProduitFragment extends Fragment implements MyProduitRecyclerViewAd
             new Handler(Looper.getMainLooper()).post(() -> {
                 allProduits = produits;
                 adapter = new MyProduitRecyclerViewAdapter(produits, produit -> {
-                    Toast.makeText(getContext(), produit.getNomProduit() + " clicked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), produit.getNomProduit() + " cliqué", Toast.LENGTH_SHORT).show();
                 }, userId, this);
                 recyclerView.setAdapter(adapter);
             });
@@ -105,9 +105,9 @@ public class ProduitFragment extends Fragment implements MyProduitRecyclerViewAd
     }
 
     private void filterProduits(String query) {
-        Log.d("ProduitFragment", "Filtering produits with query: " + query);
+        Log.d("ProduitFragment", "Filtrage des produits avec la requête: " + query);
         if (query.isEmpty()) {
-            Log.d("ProduitFragment", "Query is empty, updating list with all produits");
+            Log.d("ProduitFragment", "La requête est vide, mise à jour de la liste avec tous les produits");
             adapter.updateList(allProduits);
         } else {
             List<Produit> filteredList = new ArrayList<>();
@@ -132,7 +132,7 @@ public class ProduitFragment extends Fragment implements MyProduitRecyclerViewAd
                 e.printStackTrace();
             }
         }
-        return -1; // Default value if user ID is not found
+        return -1; // Valeur par défaut si l'ID utilisateur n'est pas trouvé
     }
 
     private void updateCartCount() {

@@ -45,7 +45,7 @@ public class MyCommandeProduitRecyclerViewAdapter extends RecyclerView.Adapter<M
         holder.mQuantityView.setText(String.valueOf(commandeProduit.getQuantite()));
         holder.mTotalPriceView.setText(String.format(Locale.getDefault(), "%.2f TND", commandeProduit.getQuantite() * produit.getPrix()));
 
-        // Load product image without using Glide
+        // Charger l'image du produit sans utiliser Glide
         new Thread(() -> {
             try {
                 URL url = new URL(produit.getImage());

@@ -73,7 +73,7 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
 
         holder.itemView.setOnClickListener(v->{});
 
-        // Handle click event for "Termine" status
+        // Gérer l'événement de clic pour le statut "Terminé"
         if ("termine".equals(mValues.get(position).getStatut())) {
             holder.itemView.setOnClickListener(v -> showAviDialog(holder.mItem, holder));
         } else if ("en_attente".equals(mValues.get(position).getStatut())) {
@@ -83,58 +83,58 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
 
     private void showCancelDialog(RendezVous rendezVous, ViewHolder holder) {
         new MaterialAlertDialogBuilder(context)
-                .setTitle("Cancel Rendezvous")
-                .setMessage("Do you want to cancel this rendezvous?")
-                .setPositiveButton("Yes", (dialog, which) -> {
+                .setTitle("Annuler Rendez-vous")
+                .setMessage("Voulez-vous annuler ce rendez-vous?")
+                .setPositiveButton("Oui", (dialog, which) -> {
                     rendezVous.setStatut("annule");
                     new RendezVousController(context).updateRendezVous(rendezVous.getId(), rendezVous)
                             .thenAccept(updatedRendezVous -> {
                                 ((Activity) context).runOnUiThread(() -> {
-                                    Toast.makeText(context, "Rendezvous cancelled", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Rendez-vous annulé", Toast.LENGTH_SHORT).show();
                                     notifyDataSetChanged();
                                 });
                             }).exceptionally(throwable -> {
                                 ((Activity) context).runOnUiThread(() -> {
-                                    Toast.makeText(context, "Error cancelling rendezvous: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(context, "Erreur lors de l'annulation du rendez-vous: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                                 });
                                 return null;
                             });
                 })
-                .setNegativeButton("No", (dialog, which) -> dialog.dismiss())
+                .setNegativeButton("Non", (dialog, which) -> dialog.dismiss())
                 .show();
     }
 
     private void loadDataFromController(RendezVous rendezVous, ViewHolder holder) {
 
-        // Fetch service name using motif (service id)
+        // Récupérer le nom du service en utilisant le motif (id du service)
         int serviceId = rendezVous.getMotif();
         CompletableFuture<Service> serviceFuture = serviceController.getServiceById(serviceId);
         serviceFuture.thenAccept(service -> {
             if (service != null) {
                 ((Activity) context).runOnUiThread(() -> holder.mMotifView.setText(service.getNomService()));
             } else {
-                ((Activity) context).runOnUiThread(() -> holder.mMotifView.setText("Unknown"));
+                ((Activity) context).runOnUiThread(() -> holder.mMotifView.setText("Inconnu"));
             }
         }).exceptionally(throwable -> {
-            ((Activity) context).runOnUiThread(() -> holder.mMotifView.setText("Error"));
+            ((Activity) context).runOnUiThread(() -> holder.mMotifView.setText("Erreur"));
             return null;
         });
 
-        // Fetch animal name using animal id
+        // Récupérer le nom de l'animal en utilisant l'id de l'animal
         int animalId = rendezVous.getAnimalId();
         CompletableFuture<Animaux> animalFuture = animauxController.getAnimauxById(animalId);
         animalFuture.thenAccept(animaux -> {
             if (animaux != null) {
                 ((Activity) context).runOnUiThread(() -> holder.mAnimalNameView.setText(animaux.getNom()));
             } else {
-                ((Activity) context).runOnUiThread(() -> holder.mAnimalNameView.setText("Unknown"));
+                ((Activity) context).runOnUiThread(() -> holder.mAnimalNameView.setText("Inconnu"));
             }
         }).exceptionally(throwable -> {
-            ((Activity) context).runOnUiThread(() -> holder.mAnimalNameView.setText("Error"));
+            ((Activity) context).runOnUiThread(() -> holder.mAnimalNameView.setText("Erreur"));
             return null;
         });
 
-        // Fetch and display Avi if available
+        // Récupérer et afficher l'avis si disponible
         if ("termine".equals(rendezVous.getStatut())) {
             ((Activity) context).runOnUiThread(() -> {
                 holder.mAviView.setVisibility(View.VISIBLE);
@@ -157,13 +157,13 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
                 });
             } else {
                 ((Activity) context).runOnUiThread(() -> {
-                    holder.mAviView.setText("No review");
+                    holder.mAviView.setText("Pas d'avis");
                     holder.mRatingBar.setRating(0);
                 });
             }
         }).exceptionally(throwable -> {
             ((Activity) context).runOnUiThread(() -> {
-                holder.mAviView.setText("Error");
+                holder.mAviView.setText("Erreur");
                 holder.mRatingBar.setRating(0);
             });
             return null;
@@ -196,17 +196,17 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
             return null;
         });
 
-        builder.setPositiveButton("Save", (dialog, which) -> {
+        builder.setPositiveButton("Enregistrer", (dialog, which) -> {
             int rating = (int) ratingBar.getRating();
             String comment = commentInput.getText().toString();
 
             Avi newAvi = new Avi(0, rendezVous.getId(), rating, comment, new Date(), currentUserID);
             CompletableFuture<Avi> future;
             if (aviHolder[0] == null) {
-                Log.d("AVI", "Creating new avi");
+                Log.d("AVI", "Création d'un nouvel avis");
                 future = aviController.createAvi(newAvi);
             } else {
-                Log.d("AVI", "Updating existing avi");
+                Log.d("AVI", "Mise à jour de l'avis existant");
                 newAvi.setId(aviHolder[0].getId());
                 future = aviController.updateAvi(aviHolder[0].getId(), newAvi);
             }
@@ -214,20 +214,20 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
             future.thenAccept(savedAvi -> {
                 ((Activity) context).runOnUiThread(() -> {
                     notifyDataSetChanged();
-                    Toast.makeText(context, "Review saved", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Avis enregistré", Toast.LENGTH_SHORT).show();
                     loadDataFromController(rendezVous, holder);
                     dialog.dismiss();
                 });
             }).exceptionally(throwable -> {
                 ((Activity) context).runOnUiThread(() -> {
-                    Toast.makeText(context, "Error saving review: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Erreur lors de l'enregistrement de l'avis: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
                 });
                 return null;
             });
         });
 
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Annuler", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 

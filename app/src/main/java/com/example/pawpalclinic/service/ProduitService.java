@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.concurrent.CompletableFuture;
 
 import okhttp3.Call;
@@ -33,6 +34,7 @@ public class ProduitService {
 
     public ProduitService(Context context) {
         this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/produits";
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 
     // Get all products

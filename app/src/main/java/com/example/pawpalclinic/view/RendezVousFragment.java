@@ -78,7 +78,7 @@ public class RendezVousFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        adapter = new MyRendezVousRecyclerViewAdapter(rendezVousList,getContext());
+        adapter = new MyRendezVousRecyclerViewAdapter(rendezVousList, getContext());
         recyclerView.setAdapter(adapter);
 
         loadUserRendezVous(context);
@@ -122,14 +122,14 @@ public class RendezVousFragment extends Fragment {
                         recyclerView.setVisibility(View.VISIBLE);
                     });
                 }).exceptionally(throwable -> {
-                    Log.e(TAG, "Error loading data", throwable);
+                    Log.e(TAG, "Erreur lors du chargement des données", throwable);
                     getActivity().runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
                     });
                     return null;
                 });
             } catch (Exception e) {
-                Log.e(TAG, "Error parsing user JSON", e);
+                Log.e(TAG, "Erreur lors de l'analyse du JSON utilisateur", e);
                 progressBar.setVisibility(View.GONE);
             }
         } else {

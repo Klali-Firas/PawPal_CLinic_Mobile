@@ -67,7 +67,7 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
 
         if (produit.getQuantiteStock() == 0) {
             holder.addToCartButton.setEnabled(false);
-            holder.addToCartButton.setText("Out of Stock");
+            holder.addToCartButton.setText("Rupture de Stock");
         } else {
             holder.addToCartButton.setEnabled(true);
             holder.addToCartButton.setText(R.string.add_to_cart);
@@ -91,7 +91,6 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
         Button decreaseButton = dialogView.findViewById(R.id.button_decrease_quantity);
         Button increaseButton = dialogView.findViewById(R.id.button_increase_quantity);
         Button confirmButton = dialogView.findViewById(R.id.button_confirm);
-
 
         productName.setText(produit.getNomProduit());
         productDescription.setText(produit.getDescription());
@@ -122,12 +121,12 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
         quantityEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No action needed
+                // Aucune action nécessaire
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // No action needed
+                // Aucune action nécessaire
             }
 
             @Override
@@ -136,14 +135,12 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
                     int currentQuantity = Integer.parseInt(s.toString());
                     totalText.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * currentQuantity));
                 } catch (NumberFormatException e) {
-                    // Handle invalid number format
+                    // Gérer le format de nombre invalide
                 }
             }
         });
 
         AlertDialog dialog = builder.create();
-
-
 
         confirmButton.setOnClickListener(v -> {
             int finalQuantity = Integer.parseInt(quantityEdit.getText().toString());
@@ -151,16 +148,15 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
             cartService.addToCart(produit);
 
             dialog.dismiss();
-            Toast.makeText(context, "Product added to cart", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Produit ajouté au panier", Toast.LENGTH_SHORT).show();
 
-            // Update cart count
+            // Mettre à jour le nombre de produits dans le panier
             if (cartUpdateListener != null) {
                 cartUpdateListener.onCartUpdated();
             }
         });
 
-
-        // Disable confirm button if product is out of stock
+        // Désactiver le bouton de confirmation si le produit est en rupture de stock
         if (produit.getQuantiteStock() == 0) {
             confirmButton.setEnabled(false);
         }
