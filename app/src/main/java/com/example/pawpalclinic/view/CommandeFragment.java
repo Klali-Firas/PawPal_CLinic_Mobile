@@ -51,9 +51,14 @@ public class CommandeFragment extends Fragment {
         adapter = new MyCommandeRecyclerViewAdapter(commandesList, getContext());
         recyclerView.setAdapter(adapter);
 
-        chargerCommandesUtilisateur();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        chargerCommandesUtilisateur();
     }
 
     private void chargerCommandesUtilisateur() {

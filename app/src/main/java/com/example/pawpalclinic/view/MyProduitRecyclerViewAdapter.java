@@ -159,6 +159,9 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
         // Désactiver le bouton de confirmation si le produit est en rupture de stock
         if (produit.getQuantiteStock() == 0) {
             confirmButton.setEnabled(false);
+            confirmButton.setText("Rupture de Stock");
+            confirmButton.setBackgroundColor(context.getResources().getColor(R.color.md_theme_errorContainer, context.getTheme()));
+            confirmButton.setTextColor(context.getResources().getColor(R.color.md_theme_onErrorContainer, context.getTheme()));
         }
 
         dialog.show();

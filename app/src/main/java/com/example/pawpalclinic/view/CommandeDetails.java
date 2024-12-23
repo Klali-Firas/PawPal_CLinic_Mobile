@@ -1,8 +1,10 @@
+// CommandeDetails.java
 package com.example.pawpalclinic.view;
 
 import android.os.Bundle;
 import android.util.Pair;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.pawpalclinic.R;
+import com.example.pawpalclinic.controller.CommandeController;
 import com.example.pawpalclinic.controller.CommandeProduitController;
 import com.example.pawpalclinic.controller.ProduitController;
 import com.example.pawpalclinic.model.Commande;
 import com.example.pawpalclinic.model.CommandeProduit;
 import com.example.pawpalclinic.model.Produit;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -31,6 +35,7 @@ public class CommandeDetails extends AppCompatActivity {
     private Gson gson = new Gson();
     private CommandeProduitController commandeProduitController;
     private ProduitController produitController;
+    private CommandeController commandeController;
     private RecyclerView recyclerView;
     private MyCommandeProduitRecyclerViewAdapter adapter;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy hh:mm", Locale.getDefault());
@@ -48,6 +53,7 @@ public class CommandeDetails extends AppCompatActivity {
 
         commandeProduitController = new CommandeProduitController(this);
         produitController = new ProduitController(this);
+        commandeController = new CommandeController(this);
 
         // Get the commande details from the intent
         String commandeJson = getIntent().getStringExtra("commande_json");
@@ -70,6 +76,36 @@ public class CommandeDetails extends AppCompatActivity {
 
         // Load and display CommandeProduits
         loadCommandeProduits(commande.getId());
+
+        // Add click listener to orderStatusTextView
+        orderStatusTextView.setOnClickListener(v -> {
+            if ("en_attente".equals(commande.getStatut())) {
+                showCancelDialog(commande, orderStatusTextView);
+            }
+        });
+    }
+
+    private void showCancelDialog(Commande commande, TextView orderStatusTextView) {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Annuler Commande")
+                .setMessage("Voulez-vous annuler cette commande?")
+                .setPositiveButton("Oui", (dialog, which) -> {
+                    commande.setStatut("annule");
+                    commandeController.updateCommande(commande.getId(), commande)
+                            .thenAccept(updatedCommande -> {
+                                runOnUiThread(() -> {
+                                    orderStatusTextView.setText("annule");
+                                    Toast.makeText(this, "Commande annulée", Toast.LENGTH_SHORT).show();
+                                });
+                            }).exceptionally(throwable -> {
+                                runOnUiThread(() -> {
+                                    Toast.makeText(this, "Erreur lors de l'annulation de la commande: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                                return null;
+                            });
+                })
+                .setNegativeButton("Non", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 
     private void loadCommandeProduits(int commandeId) {

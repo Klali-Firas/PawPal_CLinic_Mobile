@@ -30,6 +30,7 @@ public class CommandeService {
 
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
+    private final SimpleDateFormat secondDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
     private String API_URL;
 
 
@@ -187,7 +188,7 @@ public class CommandeService {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        Date dateCommande = dateFormat.parse(jsonObject.getString("dateCommande"));
+                        Date dateCommande = secondDateFormat.parse(jsonObject.getString("dateCommande"));
                         Commande updatedCommande = new Commande(
                                 jsonObject.getInt("id"),
                                 jsonObject.getInt("proprietaireId"),
