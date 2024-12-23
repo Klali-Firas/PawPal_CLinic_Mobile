@@ -88,6 +88,9 @@ public class HomePage extends AppCompatActivity {
                 startActivity(intent);
             } else if (itemId == R.id.nav_logout) {
                 new SignInService(getApplicationContext()).signOut();
+            }else if (itemId == R.id.aprops) {
+                Intent intent = new Intent(this, apropos.class);
+                startActivity(intent);
             }
             drawerLayout.closeDrawers();
             return true;

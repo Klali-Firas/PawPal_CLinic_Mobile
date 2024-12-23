@@ -52,6 +52,8 @@ dependencies {
     implementation(libs.recyclerview)
     implementation(libs.gson)
     implementation(libs.core)
+    implementation(libs.image.picasso)
+    implementation(libs.image)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
