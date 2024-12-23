@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -59,7 +62,7 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
         Produit produit = mValues.get(position);
         holder.productName.setText(produit.getNomProduit());
         holder.productDescription.setText(produit.getDescription());
-        holder.productPrice.setText(String.format("%s TND", produit.getPrix()));
+        holder.productPrice.setText(String.format(Locale.getDefault(), "%.2f TND", produit.getPrix()));
         loadImage(produit.getImage(), holder.productImage);
 
         if (produit.getQuantiteStock() == 0) {
@@ -88,7 +91,7 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
         Button decreaseButton = dialogView.findViewById(R.id.button_decrease_quantity);
         Button increaseButton = dialogView.findViewById(R.id.button_increase_quantity);
         Button confirmButton = dialogView.findViewById(R.id.button_confirm);
-        Button cancelButton = dialogView.findViewById(R.id.button_cancel);
+
 
         productName.setText(produit.getNomProduit());
         productDescription.setText(produit.getDescription());
@@ -98,14 +101,14 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
         Produit existingProduct = cartService.getProductById(produit.getId());
         final int[] quantity = {existingProduct != null ? existingProduct.getQuantity() : 1};
         quantityEdit.setText(String.valueOf(quantity[0]));
-        totalText.setText(String.format("Total: %s TND", produit.getPrix() * quantity[0]));
+        totalText.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * quantity[0]));
 
         decreaseButton.setOnClickListener(v -> {
             int currentQuantity = Integer.parseInt(quantityEdit.getText().toString());
             if (currentQuantity > 1) {
                 currentQuantity--;
                 quantityEdit.setText(String.valueOf(currentQuantity));
-                totalText.setText(String.format("Total: %s TND", produit.getPrix() * currentQuantity));
+                totalText.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * currentQuantity));
             }
         });
 
@@ -113,15 +116,34 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
             int currentQuantity = Integer.parseInt(quantityEdit.getText().toString());
             currentQuantity++;
             quantityEdit.setText(String.valueOf(currentQuantity));
-            totalText.setText(String.format("Total: %s TND", produit.getPrix() * currentQuantity));
+            totalText.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * currentQuantity));
+        });
+
+        quantityEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // No action needed
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                try {
+                    int currentQuantity = Integer.parseInt(s.toString());
+                    totalText.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * currentQuantity));
+                } catch (NumberFormatException e) {
+                    // Handle invalid number format
+                }
+            }
         });
 
         AlertDialog dialog = builder.create();
 
-        // Set the dialog window background to transparent
-        if (dialog.getWindow() != null) {
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        }
+
 
         confirmButton.setOnClickListener(v -> {
             int finalQuantity = Integer.parseInt(quantityEdit.getText().toString());
@@ -137,7 +159,6 @@ public class MyProduitRecyclerViewAdapter extends RecyclerView.Adapter<MyProduit
             }
         });
 
-        cancelButton.setOnClickListener(v -> dialog.dismiss());
 
         // Disable confirm button if product is out of stock
         if (produit.getQuantiteStock() == 0) {

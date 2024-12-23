@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="0dp"
 
     >
@@ -10,6 +10,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/md_theme_surfaceContainer"
         android:layout_margin="0dp"
         android:elevation="8dp"
         android:padding="16dp"
@@ -20,89 +21,121 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-
-
+            android:background="@color/md_theme_surfaceContainer"
             android:padding="16dp">
 
             <TextView
                 android:id="@+id/dialog_product_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="product title"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/dialog_product_image"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:scaleType="centerCrop" />
+                android:orientation="horizontal">
 
+                <ImageView
+                    android:id="@+id/dialog_product_image"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="0.75"
+                    android:src="@drawable/baseline_pets_24" />
+            </LinearLayout>
+<LinearLayout
+    android:layout_marginTop="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
             <TextView
                 android:id="@+id/dialog_product_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:text="description"
+                android:layout_weight="1"
                 android:textSize="16sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardElevation="4dp"
+        app:strokeWidth="0dp"
+        app:cardCornerRadius="30dp"
+        android:layout_margin="6dp"
+        >
+    <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/button_decrease_quantity"
+                android:orientation="vertical">
+
+                <com.google.android.material.button.MaterialButton
+                    android:textSize="25sp"
+                    android:padding="0dp"
+                    android:textColor="@color/md_theme_onSurface"
+                    android:id="@+id/button_increase_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="-" />
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:text="+"
+                    android:minWidth="50dp"/>
 
                 <EditText
                     android:id="@+id/edit_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
+
                     android:gravity="center"
                     android:inputType="number"
                     android:text="1"
                     android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/button_increase_quantity"
+
+                <com.google.android.material.button.MaterialButton
+                    android:textColor="@color/md_theme_onSurface"
+                    android:textSize="25sp"
+                    android:padding="0dp"
+                    android:id="@+id/button_decrease_quantity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/text_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="Total: 0 TND"
-                android:textSize="16sp" />
-
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:text="-"
+                    android:minWidth="50dp"/>
+            </LinearLayout></com.google.android.material.card.MaterialCardView>
+</LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:gravity="center_horizontal"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
+            <TextView
+                android:id="@+id/text_total"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Total: 0 TND"
+                android:layout_weight="1"
+                android:textSize="18sp"
+                android:textStyle="bold"
+               />
 
-                <Button
+
+
+                <com.google.android.material.button.MaterialButton
+                    android:translationZ="5dp"
+                   android:layout_margin="2dp"
+                    app:backgroundTint="@color/md_theme_primaryContainer"
+                    android:textColor="@color/md_theme_onPrimaryContainer"
                     android:id="@+id/button_confirm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Confirm" />
+                    android:text="@string/add_to_cart_from_dialogue" />
 
-                <Button
-                    android:id="@+id/button_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Cancel" />
+
             </LinearLayout>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

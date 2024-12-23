@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.CartUpdateListener {
@@ -80,11 +81,11 @@ public class cart extends AppCompatActivity implements CartRecyclerViewAdapter.C
         for (Produit produit : cartItems) {
             totalPrice += produit.getPrix() * produit.getQuantity();
         }
-        totalPriceTextView.setText(String.format("Total: %s TND", totalPrice));
+        totalPriceTextView.setText(String.format(Locale.getDefault(), "Total: %.2f TND", totalPrice));
 
         Button checkoutButton = findViewById(R.id.checkout_button);
         if (cartItems.isEmpty()) {
-            totalPriceTextView.setText("Total: 0 TND");
+            totalPriceTextView.setText("Total: 0.00 TND");
             checkoutButton.setEnabled(false);
         } else {
             checkoutButton.setEnabled(true);

@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -63,9 +64,9 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
 
         Produit produit = mValues.get(position);
         holder.productName.setText(produit.getNomProduit());
-        holder.productUnitPrice.setText(String.format("%s TND", produit.getPrix()));
+        holder.productUnitPrice.setText(String.format(Locale.getDefault(), "%.2f TND", produit.getPrix()));
         holder.editQuantity.setText(String.valueOf(produit.getQuantity()));
-        holder.productTotalPrice.setText(String.format("Total: %s TND", produit.getPrix() * produit.getQuantity()));
+        holder.productTotalPrice.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * produit.getQuantity()));
         loadImage(produit.getImage(), holder.productImage);
 
         holder.editQuantity.addTextChangedListener(new TextWatcher() {
@@ -90,7 +91,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
                     int quantity = Integer.parseInt(s.toString());
                     produit.setQuantity(quantity);
                     cartService.addToCart(produit);
-                    holder.productTotalPrice.setText(String.format("Total: %s TND", produit.getPrix() * quantity));
+                    holder.productTotalPrice.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * quantity));
                     cartUpdateListener.onCartUpdated();
                 } catch (NumberFormatException e) {
                     // Handle invalid number format
@@ -105,7 +106,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
                 holder.editQuantity.setText(String.valueOf(quantity));
                 produit.setQuantity(quantity);
                 cartService.addToCart(produit);
-                holder.productTotalPrice.setText(String.format("Total: %s TND", produit.getPrix() * quantity));
+                holder.productTotalPrice.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * quantity));
                 cartUpdateListener.onCartUpdated();
             }
         });
@@ -116,7 +117,7 @@ public class CartRecyclerViewAdapter extends RecyclerView.Adapter<CartRecyclerVi
             holder.editQuantity.setText(String.valueOf(quantity));
             produit.setQuantity(quantity);
             cartService.addToCart(produit);
-            holder.productTotalPrice.setText(String.format("Total: %s TND", produit.getPrix() * quantity));
+            holder.productTotalPrice.setText(String.format(Locale.getDefault(), "Total: %.2f TND", produit.getPrix() * quantity));
             cartUpdateListener.onCartUpdated();
         });
 

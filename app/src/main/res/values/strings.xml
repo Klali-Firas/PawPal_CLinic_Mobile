@@ -52,4 +52,6 @@
     <string name="add_to_cart">Add to Cart</string>
     <string name="product_image">Product Image</string>
     <string name="edit_animal">modifier cette animaux</string>
+    <string name="checkout">Checkout</string>
+    <string name="add_to_cart_from_dialogue">Add to cart</string>
 </resources>
