@@ -11,8 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +36,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class AddRendezVousFragment extends Fragment {
@@ -44,9 +45,9 @@ public class AddRendezVousFragment extends Fragment {
     private static final String USER_KEY = "user";
     private TextInputEditText inputName;
     private TextInputEditText inputLastName;
-    private Spinner selectAnimal;
+    private AutoCompleteTextView selectAnimal;
     private TextInputEditText inputDate;
-    private Spinner selectService;
+    private AutoCompleteTextView selectService;
     private Button btnSubmit;
     private TextView workingHoursText;
     private AnimauxController animauxController;
@@ -138,15 +139,26 @@ public class AddRendezVousFragment extends Fragment {
     private void loadAnimals() {
         CompletableFuture<List<Animaux>> animauxFuture = animauxController.getAllAnimaux();
         animauxFuture.thenAccept(animauxList -> {
-            List<String> animalNames = new ArrayList<>();
-            for (Animaux animaux : animauxList) {
-                animalNames.add(animaux.getNom() + " (" + animaux.getRace() + ")");
+            if (animauxList != null && !animauxList.isEmpty()) {
+                List<String> animalNames = new ArrayList<>();
+                for (Animaux animaux : animauxList) {
+                    animalNames.add(animaux.getNom() + " (" + animaux.getRace() + ")");
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, animalNames);
+                requireActivity().runOnUiThread(() -> {
+                    selectAnimal.setAdapter(adapter);
+                    selectAnimal.setOnItemClickListener((parent, view, position, id) -> {
+                        // Handle item click if needed
+                    });
+                });
+            } else {
+                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "No animals found", Toast.LENGTH_SHORT).show());
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, animalNames);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            selectAnimal.setAdapter(adapter);
         }).exceptionally(throwable -> {
-            Toast.makeText(getContext(), "Error loading animals", Toast.LENGTH_SHORT).show();
+            requireActivity().runOnUiThread(() -> {
+                Toast.makeText(getContext(), "Error loading animals. Retrying...", Toast.LENGTH_SHORT).show();
+                loadAnimals(); // Retry loading animals
+            });
             return null;
         });
     }
@@ -154,15 +166,26 @@ public class AddRendezVousFragment extends Fragment {
     private void loadServices() {
         CompletableFuture<List<Service>> serviceFuture = serviceController.getAllServices();
         serviceFuture.thenAccept(serviceList -> {
-            List<String> serviceNames = new ArrayList<>();
-            for (Service service : serviceList) {
-                serviceNames.add(service.getNomService());
+            if (serviceList != null && !serviceList.isEmpty()) {
+                List<String> serviceNames = new ArrayList<>();
+                for (Service service : serviceList) {
+                    serviceNames.add(service.getNomService());
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, serviceNames);
+                requireActivity().runOnUiThread(() -> {
+                    selectService.setAdapter(adapter);
+                    selectService.setOnItemClickListener((parent, view, position, id) -> {
+                        // Handle item click if needed
+                    });
+                });
+            } else {
+                requireActivity().runOnUiThread(() -> Toast.makeText(getContext(), "No services found", Toast.LENGTH_SHORT).show());
             }
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, serviceNames);
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            selectService.setAdapter(adapter);
         }).exceptionally(throwable -> {
-            Toast.makeText(getContext(), "Error loading services", Toast.LENGTH_SHORT).show();
+            requireActivity().runOnUiThread(() -> {
+                Toast.makeText(getContext(), "Error loading services. Retrying...", Toast.LENGTH_SHORT).show();
+                loadServices(); // Retry loading services
+            });
             return null;
         });
     }
@@ -231,8 +254,27 @@ public class AddRendezVousFragment extends Fragment {
     }
 
     private void submitForm() {
-        int selectedAnimalPosition = selectAnimal.getSelectedItemPosition();
-        int selectedServicePosition = selectService.getSelectedItemPosition();
+        String selectedAnimalText = selectAnimal.getText().toString();
+        String selectedServiceText = selectService.getText().toString();
+        int selectedAnimalPosition = -1;
+        int selectedServicePosition = -1;
+
+        List<Animaux> animauxList = animauxController.getAllAnimaux().join();
+        List<Service> serviceList = serviceController.getAllServices().join();
+
+        for (int i = 0; i < animauxList.size(); i++) {
+            if (selectedAnimalText.equals(animauxList.get(i).getNom() + " (" + animauxList.get(i).getRace() + ")")) {
+                selectedAnimalPosition = i;
+                break;
+            }
+        }
+
+        for (int i = 0; i < serviceList.size(); i++) {
+            if (selectedServiceText.equals(serviceList.get(i).getNomService())) {
+                selectedServicePosition = i;
+                break;
+            }
+        }
 
         if (selectedAnimalPosition == -1 || selectedServicePosition == -1 || inputDate.getText().toString().isEmpty()) {
             Toast.makeText(getContext(), "Please fill all fields and select a valid date/time", Toast.LENGTH_SHORT).show();
@@ -240,8 +282,8 @@ public class AddRendezVousFragment extends Fragment {
         }
 
         Date dateRendezVous = calendar.getTime();
-        Animaux selectedAnimal = animauxController.getAllAnimaux().join().get(selectedAnimalPosition);
-        Service selectedService = serviceController.getAllServices().join().get(selectedServicePosition);
+        Animaux selectedAnimal = animauxList.get(selectedAnimalPosition);
+        Service selectedService = serviceList.get(selectedServicePosition);
 
         RendezVous rendezVous = new RendezVous(
                 0,
@@ -274,8 +316,8 @@ public class AddRendezVousFragment extends Fragment {
                     Toast.makeText(getContext(), "RendezVous created successfully", Toast.LENGTH_SHORT).show();
 
                     // Reset form
-                    selectAnimal.setSelection(0);
-                    selectService.setSelection(0);
+                    selectAnimal.setText("");
+                    selectService.setText("");
                     inputDate.setText("");
                     btnSubmit.setEnabled(false);
                 })
