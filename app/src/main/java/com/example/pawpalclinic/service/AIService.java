@@ -2,6 +2,8 @@ package com.example.pawpalclinic.service;
 
 import android.content.Context;
 
+import com.example.pawpalclinic.R;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +25,7 @@ public class AIService {
     private String API_URL;
 
     public AIService(Context context) {
-        this.API_URL = "http://10.0.2.2:1234/v1/chat/completions";
+        this.API_URL = context.getString(R.string.api_base_url) +":1234/v1/chat/completions";
         this.client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.MILLISECONDS)
                 .readTimeout(0, TimeUnit.MILLISECONDS)

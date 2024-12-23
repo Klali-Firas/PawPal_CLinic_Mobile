@@ -26,7 +26,7 @@ public class UtilisateurService {
     private final OkHttpClient client = new OkHttpClient();
 
     public UtilisateurService(Context c) {
-        this.API_URL = c.getString(R.string.api_base_url) + "/api/public/utilisateurs";
+        this.API_URL = c.getString(R.string.api_base_url) + ":4332/api/public/utilisateurs";
     }
 
     // Get veterinaire by ID

@@ -34,7 +34,7 @@ public class RendezVousService {
 
 
     public RendezVousService(Context c) {
-        this.API_URL = c.getString(R.string.api_base_url) + "/api/public/rendezvous";
+        this.API_URL = c.getString(R.string.api_base_url) + ":4332/api/public/rendezvous";
 
     }
 

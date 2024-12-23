@@ -34,7 +34,7 @@ public class CommandeService {
 
 
     public CommandeService(Context context) {
-        this.API_URL = context.getString(R.string.api_base_url) + "/api/public/commandes";
+        this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/commandes";
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
     }
 

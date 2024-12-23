@@ -28,7 +28,7 @@ public class ServiceService {
     private String API_URL;
 
     public ServiceService(Context context) {
-        this.API_URL = context.getString(R.string.api_base_url) + "/api/public/services";
+        this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/services";
     }
 
     // Get all services

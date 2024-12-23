@@ -32,7 +32,7 @@ public class AviService {
     private String API_URL;
 
     public AviService(Context context) {
-        this.API_URL = context.getString(R.string.api_base_url) + "/api/public/avis";
+        this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/avis";
     }
 
     // Get all avis

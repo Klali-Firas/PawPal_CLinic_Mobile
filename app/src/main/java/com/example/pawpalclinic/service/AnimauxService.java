@@ -35,7 +35,7 @@ public class AnimauxService {
     private String API_URL;
 
     public AnimauxService(Context context) {
-        this.API_URL = context.getString(R.string.api_base_url) + "/api/public/animaux";
+        this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/animaux";
     }
 
     // Get all animals

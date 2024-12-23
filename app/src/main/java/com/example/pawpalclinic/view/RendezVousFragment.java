@@ -78,7 +78,7 @@ public class RendezVousFragment extends Fragment {
             recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
         }
 
-        adapter = new MyRendezVousRecyclerViewAdapter(rendezVousList, animauxController, serviceController);
+        adapter = new MyRendezVousRecyclerViewAdapter(rendezVousList,getContext());
         recyclerView.setAdapter(adapter);
 
         loadUserRendezVous(context);

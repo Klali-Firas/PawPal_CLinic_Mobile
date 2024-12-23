@@ -28,7 +28,7 @@ public class CommandeProduitService {
     private String API_URL;
 
     public CommandeProduitService(Context context) {
-        this.API_URL = context.getString(R.string.api_base_url) + "/api/public/commande-produits";
+        this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/commande-produits";
     }
 
     // Get all commande produits

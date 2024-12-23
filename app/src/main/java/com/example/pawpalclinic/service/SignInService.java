@@ -122,7 +122,7 @@ public class SignInService {
         new Thread(() -> {
             HttpURLConnection conn = null;
             try {
-                URL url = new URL(apiUrl + "/verifyGoogleIdToken");
+                URL url = new URL(apiUrl + ":4332/verifyGoogleIdToken");
                 conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type", "application/json; utf-8");

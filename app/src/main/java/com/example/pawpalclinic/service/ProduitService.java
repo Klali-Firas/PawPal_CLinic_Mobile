@@ -32,7 +32,7 @@ public class ProduitService {
     private String API_URL;
 
     public ProduitService(Context context) {
-        this.API_URL = context.getString(R.string.api_base_url) + "/api/public/produits";
+        this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/produits";
     }
 
     // Get all products
