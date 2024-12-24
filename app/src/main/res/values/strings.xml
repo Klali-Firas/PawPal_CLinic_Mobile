@@ -6,7 +6,7 @@
     <string name="second_fragment_label">Deuxième Fragment</string>
     <string name="next">Suivant</string>
     <string name="previous">Précédent</string>
-    <string name="api_base_url">http://192.168.96.21</string>
+    <string name="api_base_url">http://10.0.2.2</string>
     <string name="navigation_drawer_open">Ouvrir le tiroir</string>
     <string name="navigation_drawer_close">Fermer le tiroir</string>
     <!-- TODO: Remove or change this placeholder text -->

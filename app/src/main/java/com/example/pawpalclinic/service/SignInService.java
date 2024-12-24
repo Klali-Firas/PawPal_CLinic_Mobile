@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class SignInService {
     private static final String SHARED_PREFS_NAME = "user_prefs";
@@ -90,7 +91,7 @@ public class SignInService {
         } else {
             Log.i("SignInManager", "Result not OK. Result code: " + resultCode);
             if (data != null) {
-                Log.i("SignInManager", "Intent data: " + data.toString());
+                Log.i("SignInManager", "Intent data: " + data);
             }
             if (resultCode == RESULT_CANCELED) {
                 Log.i("SignInManager", "Sign-in was canceled by the user.");
@@ -132,7 +133,7 @@ public class SignInService {
                 String jsonInputString = "{\"idTokenString\": \"" + idToken + "\"}";
 
                 try (OutputStream os = conn.getOutputStream()) {
-                    byte[] input = jsonInputString.getBytes("utf-8");
+                    byte[] input = jsonInputString.getBytes(StandardCharsets.UTF_8);
                     os.write(input, 0, input.length);
                 }
 
@@ -148,7 +149,7 @@ public class SignInService {
                             response.append(inputLine);
                         }
 
-                        Log.i("SignInManager", "Response: " + response.toString());
+                        Log.i("SignInManager", "Response: " + response);
                         Log.i("SignInManager", "POST request worked.");
 
                         // Parse the response and store user data in SharedPreferences

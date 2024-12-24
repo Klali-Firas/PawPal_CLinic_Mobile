@@ -22,10 +22,10 @@ import okhttp3.Response;
 public class AIService {
 
     private final OkHttpClient client;
-    private String API_URL;
+    private final String API_URL;
 
     public AIService(Context context) {
-        this.API_URL = context.getString(R.string.api_base_url) +":1234/v1/chat/completions";
+        this.API_URL = context.getString(R.string.api_base_url) + ":1234/v1/chat/completions";
         this.client = new OkHttpClient.Builder()
                 .connectTimeout(0, TimeUnit.MILLISECONDS)
                 .readTimeout(0, TimeUnit.MILLISECONDS)

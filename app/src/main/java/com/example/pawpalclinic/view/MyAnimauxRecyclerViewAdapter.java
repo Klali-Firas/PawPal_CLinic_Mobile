@@ -17,8 +17,8 @@ import java.util.List;
 public class MyAnimauxRecyclerViewAdapter extends RecyclerView.Adapter<MyAnimauxRecyclerViewAdapter.ViewHolder> {
 
     private List<Animaux> mValues;
-    private Context context;
-    private Gson gson = new Gson();
+    private final Context context;
+    private final Gson gson = new Gson();
 
     public MyAnimauxRecyclerViewAdapter(Context context, List<Animaux> items) {
         this.context = context;

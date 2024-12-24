@@ -1,9 +1,8 @@
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:padding="16dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <com.google.android.material.textview.MaterialTextView
         android:gravity="center"
@@ -12,19 +11,18 @@ android:padding="16dp">
         android:text="@string/votre_avis"
         android:textStyle="bold"
         android:textSize="20sp"
-        android:layout_marginBottom="12dp"
-        />
+        android:layout_marginBottom="12dp" />
 
-<RatingBar
-    android:id="@+id/rating_bar"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:numStars="5"
-    android:stepSize="1.0" />
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="1.0" />
 
-<EditText
-    android:id="@+id/comment_input"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:hint="@string/add_a_comment_avi" />
+    <EditText
+        android:id="@+id/comment_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/add_a_comment_avi" />
 </LinearLayout>

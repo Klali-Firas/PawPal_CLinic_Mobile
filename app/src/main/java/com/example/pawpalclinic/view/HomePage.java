@@ -43,10 +43,10 @@ public class HomePage extends AppCompatActivity {
     private static final String USER_PHOTO_KEY = "user_photo";
     private DrawerLayout drawerLayout;
     private Fragment currentFragment = null;
-    private Map<Integer, Fragment> fragmentMap = new HashMap<>();
+    private final Map<Integer, Fragment> fragmentMap = new HashMap<>();
     private boolean doubleBackToExitPressedOnce = false;
-    private Handler handler = new Handler(Looper.getMainLooper());
-    private Runnable resetDoubleBackFlag = () -> doubleBackToExitPressedOnce = false;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Runnable resetDoubleBackFlag = () -> doubleBackToExitPressedOnce = false;
 
 
     @Override
@@ -88,7 +88,7 @@ public class HomePage extends AppCompatActivity {
                 startActivity(intent);
             } else if (itemId == R.id.nav_logout) {
                 new SignInService(getApplicationContext()).signOut();
-            }else if (itemId == R.id.aprops) {
+            } else if (itemId == R.id.aprops) {
                 Intent intent = new Intent(this, apropos.class);
                 startActivity(intent);
             }

@@ -28,7 +28,7 @@ public class CommandeFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private MyCommandeRecyclerViewAdapter adapter;
-    private List<Commande> commandesList = new ArrayList<>();
+    private final List<Commande> commandesList = new ArrayList<>();
     private CommandeController commandeController;
 
     public CommandeFragment() {

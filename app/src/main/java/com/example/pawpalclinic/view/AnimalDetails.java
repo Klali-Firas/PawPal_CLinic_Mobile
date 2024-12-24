@@ -33,7 +33,7 @@ public class AnimalDetails extends AppCompatActivity {
     private Animaux animaux;
 
     private static final String TAG = "DétailsAnimal";
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private RendezVousController rendezVousController;
     private ServiceController serviceController;
     private LinearLayout rendezvousContainer;
@@ -61,7 +61,6 @@ public class AnimalDetails extends AppCompatActivity {
         animaux = gson.fromJson(animauxJson, Animaux.class);
 
 
-
         // Récupérer et afficher l'historique des rendez-vous
 
         ImageButton editButton = findViewById(R.id.edit_button);
@@ -71,7 +70,6 @@ public class AnimalDetails extends AppCompatActivity {
             startActivity(intent);
         });
     }
-
 
 
     private void fetchAndDisplayRendezvousHistory(int animalId) {
@@ -97,6 +95,7 @@ public class AnimalDetails extends AppCompatActivity {
             return null;
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -105,7 +104,7 @@ public class AnimalDetails extends AppCompatActivity {
 
     private void loadAnimalDetails() {
         animauxController.getAnimauxById(animaux.getId()).thenAccept(a -> {
-            animaux =  a; // Mettre à jour la variable locale
+            animaux = a; // Mettre à jour la variable locale
             runOnUiThread(() -> {
                 // Définir les détails de l'animal aux vues
                 TextView nameTextView = findViewById(R.id.animal_name);
@@ -114,7 +113,7 @@ public class AnimalDetails extends AppCompatActivity {
 
                 nameTextView.setText(animaux.getNom());
                 raceTextView.setText(animaux.getRace());
-                ageTextView.setText(String.valueOf(animaux.getAge()) + " mois");
+                ageTextView.setText(animaux.getAge() + " mois");
 
                 // Récupérer et afficher l'historique des rendez-vous
                 fetchAndDisplayRendezvousHistory(animaux.getId());

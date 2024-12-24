@@ -25,7 +25,7 @@ import okhttp3.Response;
 public class CommandeProduitService {
 
     private final OkHttpClient client = new OkHttpClient();
-    private String API_URL;
+    private final String API_URL;
 
     public CommandeProduitService(Context context) {
         this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/commande-produits";

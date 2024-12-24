@@ -37,7 +37,7 @@ public class apropos extends AppCompatActivity {
                 "- [**KLALI Firas**](https://www.linkedin.com/in/klali-firas/)\n" +
                 "- [**FATNASSI Roua**](https://www.linkedin.com/in/roua-fatnassi-73b495256/)\n" +
                 "- [**ISSAOUI Med Amine**](https://www.linkedin.com/in/mohamed-amine-issaoui-a1b629256/)\n\n" +
-                "Encadré par notre enseignante [**Mme Mariem Baccouche**](https://www.linkedin.com/in/mariem-baccouche-35791a241/), qui nous guide dans ce projet avec expertise et bienveillance.\n\n" +
+                "Encadré par notre enseignante [**Mme Mariem Baccouche**](https://www.linkedin.com/in/mariem-baccouche-35791a241/) et notre superviseur [**Mr. Faouzi Maddouri**](https://www.linkedin.com/in/faouzi-maddouri-56598110/), qui nous guident dans ce projet avec expertise et bienveillance.\n\n" +
                 "---\n\n" +
                 "## **Notre Mission**\n\n" +
                 "1. **Simplifier la gestion des soins des animaux** : Planifiez vos rendez-vous, suivez l'historique médical de vos animaux et recevez des rappels importants.\n" +
@@ -51,7 +51,6 @@ public class apropos extends AppCompatActivity {
                 "- **Rappels** : Recevez des notifications pour les vaccinations et traitements nécessaires.\n\n" +
                 "---\n\n" +
                 "## **Contactez-nous**\n\n" +
-                "Si vous avez des questions ou des suggestions, n'hésitez pas à nous contacter.\n" +
                 "Email : [**pawpalclinic@gmail.com**](mailto:pawpalclinic@gmail.com)\n" +
                 "Téléphone : [**+216 96506517**](tel:+21696506517)\n\n" +
                 "Merci d'utiliser **PawPal Clinic** pour prendre soin de vos animaux ! ❤️";

@@ -32,13 +32,13 @@ import java.util.stream.Collectors;
 
 public class CommandeDetails extends AppCompatActivity {
 
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     private CommandeProduitController commandeProduitController;
     private ProduitController produitController;
     private CommandeController commandeController;
     private RecyclerView recyclerView;
     private MyCommandeProduitRecyclerViewAdapter adapter;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy hh:mm", Locale.getDefault());
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM, yyyy hh:mm", Locale.getDefault());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

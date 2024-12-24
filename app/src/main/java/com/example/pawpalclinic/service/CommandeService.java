@@ -31,7 +31,7 @@ public class CommandeService {
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
     private final SimpleDateFormat secondDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-    private String API_URL;
+    private final String API_URL;
 
 
     public CommandeService(Context context) {

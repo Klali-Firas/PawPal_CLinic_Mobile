@@ -30,7 +30,7 @@ public class AviService {
 
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
-    private String API_URL;
+    private final String API_URL;
 
     public AviService(Context context) {
         this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/avis";

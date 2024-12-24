@@ -71,7 +71,8 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
 
         loadDataFromController(holder.mItem, holder);
 
-        holder.itemView.setOnClickListener(v->{});
+        holder.itemView.setOnClickListener(v -> {
+        });
 
         // Gérer l'événement de clic pour le statut "Terminé"
         if ("termine".equals(mValues.get(position).getStatut())) {

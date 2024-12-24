@@ -15,6 +15,7 @@
         app:cardBackgroundColor="@color/md_theme_tertiaryContainer"
         app:cardElevation="2dp"
         app:strokeWidth="0dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,50 +23,53 @@
             android:layout_gravity="center_horizontal"
             android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_weight="1">
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/animal_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Name"
-                    android:textAppearance="?attr/textAppearanceHeadline6"
-                    android:textColor="@color/md_theme_onTertiaryContainer" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/animal_race"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="Race"
-                    android:textAppearance="?attr/textAppearanceBody1"
-                    android:textColor="@color/md_theme_onTertiaryContainer" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/animal_age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Age"
-                android:textAppearance="?attr/textAppearanceBody1"
-                android:textColor="@color/md_theme_onTertiaryContainer" />
-        </LinearLayout>
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="1">
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/animal_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Name"
+                            android:textAppearance="?attr/textAppearanceHeadline6"
+                            android:textColor="@color/md_theme_onTertiaryContainer" />
+
+                        <com.google.android.material.textview.MaterialTextView
+                            android:id="@+id/animal_race"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="Race"
+                            android:textAppearance="?attr/textAppearanceBody1"
+                            android:textColor="@color/md_theme_onTertiaryContainer" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/animal_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Age"
+                    android:textAppearance="?attr/textAppearanceBody1"
+                    android:textColor="@color/md_theme_onTertiaryContainer" />
+            </LinearLayout>
+
             <ImageButton
                 android:layout_gravity="center"
                 android:id="@+id/edit_button"
@@ -74,9 +78,8 @@
                 android:src="@drawable/ic_edit"
                 android:contentDescription="@string/edit_animal"
                 app:tint="@color/md_theme_onTertiaryContainer"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                 />
-</LinearLayout>
+                android:background="?attr/selectableItemBackgroundBorderless" />
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
     <ScrollView

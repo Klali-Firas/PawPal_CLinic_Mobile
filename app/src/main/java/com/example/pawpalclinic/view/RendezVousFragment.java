@@ -37,7 +37,7 @@ public class RendezVousFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private MyRendezVousRecyclerViewAdapter adapter;
-    private List<RendezVous> rendezVousList = new ArrayList<>();
+    private final List<RendezVous> rendezVousList = new ArrayList<>();
     private AnimauxController animauxController;
     private RendezVousController rendezVousController;
     private ServiceController serviceController;

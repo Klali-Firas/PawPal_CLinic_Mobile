@@ -33,7 +33,7 @@ public class AnimauxService {
     private final OkHttpClient client = new OkHttpClient();
     private final SimpleDateFormat primaryDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale.US);
     private final SimpleDateFormat fallbackDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US);
-    private String API_URL;
+    private final String API_URL;
 
     public AnimauxService(Context context) {
         this.API_URL = context.getString(R.string.api_base_url) + ":4332/api/public/animaux";
@@ -302,6 +302,7 @@ public class AnimauxService {
         });
         return future;
     }
+
     private Date parseDate(String dateString) {
         try {
             return primaryDateFormat.parse(dateString);

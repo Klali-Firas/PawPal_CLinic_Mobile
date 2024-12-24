@@ -12,12 +12,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-    <androidx.appcompat.widget.SearchView
-        android:layout_weight="1"
-        android:id="@+id/search_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:queryHint="chercher un animal" />
+
+        <androidx.appcompat.widget.SearchView
+            android:layout_weight="1"
+            android:id="@+id/search_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:queryHint="chercher un animal" />
+
         <ImageButton
             android:id="@+id/add_pet_button"
             android:layout_width="wrap_content"

@@ -36,7 +36,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 public class AddRendezVousFragment extends Fragment {
@@ -234,18 +233,12 @@ public class AddRendezVousFragment extends Fragment {
 
         // Check if the selected time is within working hours
         if (dayOfWeek >= Calendar.MONDAY && dayOfWeek <= Calendar.THURSDAY) {
-            if ((hourOfDay < 8) || (hourOfDay == 8 && minute < 0) || ((hourOfDay >= 12 && minute > 15) && hourOfDay < 14) || (hourOfDay >= 17) || (hourOfDay == 13)) {
-                return false;
-            }
+            return (hourOfDay >= 8) && (hourOfDay != 8 || minute >= 0) && ((hourOfDay < 12 || minute <= 15) || hourOfDay >= 14) && (hourOfDay < 17) && (hourOfDay != 13);
         } else if (dayOfWeek == Calendar.FRIDAY) {
-            if ((hourOfDay < 8) || (hourOfDay == 8 && minute < 0) || (hourOfDay >= 14)) {
-                return false;
-            }
+            return (hourOfDay >= 8) && (hourOfDay != 8 || minute >= 0) && (hourOfDay < 14);
         } else {
             return false;
         }
-
-        return true;
     }
 
     private void validateForm() {

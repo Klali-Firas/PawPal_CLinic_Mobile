@@ -38,7 +38,7 @@ public class AnimauxFragment extends Fragment {
     private int mColumnCount = 1;
     private AnimauxController animauxController;
     private MyAnimauxRecyclerViewAdapter adapter;
-    private List<Animaux> animauxList = new ArrayList<>();
+    private final List<Animaux> animauxList = new ArrayList<>();
     private ProgressBar progressBar;
     private RecyclerView recyclerView;
 
