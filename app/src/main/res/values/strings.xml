@@ -39,4 +39,5 @@
     <string name="noveaux_menu_item">noveaux</string>
     <string name="shop_menu_item">Shop</string>
     <string name="commandes_menu_item">Commandes</string>
+    <string name="a_propos">A propos</string>
 </resources>

@@ -82,6 +82,7 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
         }
     }
 
+    //afficher un dialog pour annuler un rendez-vous
     private void showCancelDialog(RendezVous rendezVous, ViewHolder holder) {
         new MaterialAlertDialogBuilder(context)
                 .setTitle("Annuler Rendez-vous")
@@ -105,6 +106,7 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
                 .show();
     }
 
+    //charger les données du controller
     private void loadDataFromController(RendezVous rendezVous, ViewHolder holder) {
 
         // Récupérer le nom du service en utilisant le motif (id du service)
@@ -171,6 +173,7 @@ public class MyRendezVousRecyclerViewAdapter extends RecyclerView.Adapter<MyRend
         });
     }
 
+    //afficher un dialog pour l'avis
     private void showAviDialog(RendezVous rendezVous, ViewHolder holder) {
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context);
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_avi, null);
